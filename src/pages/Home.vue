@@ -101,8 +101,9 @@
 </Transition>
 
     <!-- Header -->
-    <section class="relative px-9 pt-14">
-      <div class="grid items-center gap-10 md:grid-cols-[1fr_1.1fr]">
+    <section class="w-full px-4 md:px-6 lg:px-8 pt-14">
+      <div class="relative mx-auto max-w-7xl">
+        <div class="grid items-center gap-10 md:grid-cols-[1fr_1.1fr]">
         <!-- Left -->
         <div class="relative z-20">
           <span class="rounded-full bg-orange-500/10 px-5 py-3 text-sm font-bold text-orange-400">
@@ -226,12 +227,14 @@
           <p class="text-sm font-bold">{{ item.name }}</p>
         </div>
       </div>
+      </div>
     </section>
 
 
     <!-- Popular Events -->
-    <section class="mt-10 px-9">
-      <div class="rounded-3xl border border-white/10 bg-[#0b0b0b] p-5">
+    <section class="w-full px-4 md:px-6 lg:px-8 mt-10">
+      <div class="mx-auto max-w-7xl">
+        <div class="rounded-3xl border border-white/10 bg-[#0b0b0b] p-5">
         <div class="mb-6 flex items-center justify-between">
           <h2 class="text-2xl font-black">Popular Events Near You 🔥</h2>
           <a href="#" class="text-sm font-bold text-orange-500">View all events →</a>
@@ -270,11 +273,13 @@
           </div>
         </div>
       </div>
+      </div>
     </section>
 
     <!-- Marketplace Preview -->
-    <section class="mt-8 px-4">
-      <div class="grid gap-8 rounded-3xl border border-orange-500 bg-[#120905] p-8 md:grid-cols-[1fr_2fr]">
+    <section class="w-full px-4 md:px-6 lg:px-8 mt-8">
+      <div class="mx-auto max-w-7xl">
+        <div class="grid gap-8 rounded-3xl border border-orange-500 bg-[#120905] p-8 md:grid-cols-[1fr_2fr]">
         <div class="flex flex-col justify-center">
           <h2 class="text-4xl font-black leading-tight">
             Everything You Need
@@ -303,11 +308,12 @@
           </div>
         </div>
       </div>
+      </div>
     </section>
 
     <!-- Why Choose + App CTA -->
-    <section class="w-full px-4 md:px-6 lg:px-6 mt-10">
-      <div class="mx-auto max-w-9xl">
+    <section class="w-full px-4 md:px-6 lg:px-8 mt-10">
+      <div class="mx-auto max-w-7xl">
 
         <!-- Why Choose -->
         <div class="grid items-center gap-6 lg:grid-cols-[1.2fr_2fr]">
