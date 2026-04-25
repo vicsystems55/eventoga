@@ -1,29 +1,72 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../pages/Home.vue";
+import DefaultLayout from "../layouts/DefaultLayout.vue";
+import DashboardLayout from "../layouts/DashboardLayout.vue";
 
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
+    component: DefaultLayout,
+    meta: { layout: "default" },
+    children: [
+      {
+        path: "",
+        name: "Home",
+        component: Home,
+      },
+      {
+        path: "auth",
+        name: "Auth",
+        component: () => import("../pages/authPage.vue"),
+      },
+      {
+        path: "events",
+        name: "Events",
+        component: () => import("../pages/eventsPage.vue"),
+      },
+      {
+        path: "marketplace",
+        name: "Marketplace",
+        component: () => import("../pages/marketplacePage.vue"),
+      },
+      {
+        path: "about",
+        name: "About",
+        component: () => import("../pages/aboutPage.vue"),
+      },
+    ],
   },
-
-  // router/index.js
   {
-    path: "/auth",
-    name: "Auth",
-    component: () => import("../pages/authPage.vue"),
-  },
-  {
-    path: "/events",
-    name: "Events",
-    component: () => import("../pages/eventsPage.vue"),
-  },
-  // router/index.js
-  {
-    path: "/marketplace",
-    name: "Marketplace",
-    component: () => import("../pages/marketplacePage.vue"),
+    path: "/dashboard",
+    component: DashboardLayout,
+    meta: { layout: "dashboard" },
+    children: [
+      {
+        path: "",
+        name: "Dashboard",
+        component: () => import("../pages/dashboard/DashboardHome.vue"),
+      },
+      {
+        path: "my-events",
+        name: "MyEvents",
+        component: () => import("../pages/dashboard/MyEvents.vue"),
+      },
+      {
+        path: "bookings",
+        name: "Bookings",
+        component: () => import("../pages/dashboard/Bookings.vue"),
+      },
+      {
+        path: "analytics",
+        name: "Analytics",
+        component: () => import("../pages/dashboard/Analytics.vue"),
+      },
+      {
+        path: "settings",
+        name: "Settings",
+        component: () => import("../pages/dashboard/Settings.vue"),
+      },
+    ],
   },
 ];
 

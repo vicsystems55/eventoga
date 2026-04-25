@@ -1,86 +1,5 @@
 <template>
-  <main class="min-h-screen overflow-hidden ambient-bg text-white">
-    <!-- Navbar -->
-    <nav class="relative z-50 w-full px-4 py-4 md:px-6 lg:px-8">
-      <div class="mx-auto flex max-w-7xl items-center justify-between">
-        <div class="flex items-center gap-2 text-2xl font-black md:text-3xl">
-          <span>Event<span class="text-orange-500">Oga</span></span>
-          <span class="text-2xl">🎟️</span>
-        </div>
-
-        <div class="hidden gap-10 text-sm font-semibold md:flex">
-          <router-link to="/events" class="transition hover:text-orange-500">Events</router-link>
-          <router-link to="/marketplace" class="transition hover:text-orange-500">Marketplace</router-link>
-          <router-link to="/organizers" class="transition hover:text-orange-500">For Organizers</router-link>
-          <router-link to="/blog" class="transition hover:text-orange-500">Blog</router-link>
-          <router-link to="/about" class="transition hover:text-orange-500">About Us⌄</router-link>
-        </div>
-
-        <div class="hidden items-center gap-3 md:flex">
-          <button class="rounded-xl border border-purple-500/40 px-5 py-3 text-sm font-bold glow-purple-soft">
-            📍 Lagos⌄
-          </button>
-          <router-link to="/auth"
-            class="rounded-xl border border-purple-500/40 px-6 py-3 text-sm font-bold glow-purple-soft hover:bg-purple-500/10 transition-all duration-300 inline-block">
-            Login
-          </router-link>
-          <router-link to="/auth?tab=register"
-            class="rounded-xl bg-orange-500 px-6 py-3 text-sm font-black text-white glow-orange hover:bg-orange-600 transition-all duration-300 inline-block">
-            Sign Up
-          </router-link>
-        </div>
-
-        <button @click="isMenuOpen = true"
-          class="grid h-11 w-11 place-items-center rounded-xl border border-white/15 bg-white/5 md:hidden">
-          <span class="space-y-1.5">
-            <span class="block h-0.5 w-6 bg-white"></span>
-            <span class="block h-0.5 w-6 bg-white"></span>
-            <span class="block h-0.5 w-6 bg-white"></span>
-          </span>
-        </button>
-      </div>
-    </nav>
-
-    <!-- Mobile Drawer -->
-    <Transition name="drawer-fade">
-      <div v-if="isMenuOpen" class="fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm md:hidden"
-        @click="isMenuOpen = false">
-        <aside
-          class="absolute right-0 top-0 h-full w-[85%] max-w-sm border-l border-orange-500/20 bg-[#080808] p-6 shadow-2xl"
-          @click.stop>
-          <div class="flex items-center justify-between">
-            <h2 class="text-2xl font-black">
-              Event<span class="text-orange-500">Oga</span>
-            </h2>
-
-            <button @click="isMenuOpen = false"
-              class="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-2xl">
-              ×
-            </button>
-          </div>
-
-          <div class="mt-10 flex flex-col gap-4 text-lg font-bold">
-            <router-link to="/events" @click="isMenuOpen = false"
-              class="rounded-2xl bg-white/5 px-5 py-4 hover:bg-orange-500 hover:text-black">Events</router-link>
-            <router-link to="/marketplace" @click="isMenuOpen = false"
-              class="rounded-2xl bg-white/5 px-5 py-4 hover:bg-orange-500 hover:text-black">Marketplace</router-link>
-            <router-link to="/for-organizers" @click="isMenuOpen = false"
-              class="rounded-2xl bg-white/5 px-5 py-4 hover:bg-orange-500 hover:text-black">For Organizers</router-link>
-            <router-link to="/blog" @click="isMenuOpen = false"
-              class="rounded-2xl bg-white/5 px-5 py-4 hover:bg-orange-500 hover:text-black">Blog</router-link>
-            <router-link to="/about" @click="isMenuOpen = false"
-              class="rounded-2xl bg-white/5 px-5 py-4 hover:bg-orange-500 hover:text-black">About Us</router-link>
-          </div>
-
-          <div class="mt-10 space-y-3">
-            <button class="w-full rounded-xl border border-white/20 px-5 py-4 font-bold">📍 Lagos</button>
-            <button class="w-full rounded-xl border border-white/20 px-5 py-4 font-bold">Login</button>
-            <button class="w-full rounded-xl bg-orange-500 px-5 py-4 font-black text-black">Sign Up</button>
-          </div>
-        </aside>
-      </div>
-    </Transition>
-
+  <div class="ambient-bg">
     <!-- Header -->
     <section data-aos="fade-up" class="w-full px-4 pt-10 md:px-6 md:pt-14 lg:px-8">
       <div class="relative mx-auto max-w-7xl">
@@ -93,7 +12,7 @@
 
             <h1 data-aos="fade-up" data-aos-delay="200"
               class="mt-6 max-w-xl text-4xl font-black leading-tight tracking-tight md:mt-8 md:max-w-2xl md:text-7xl">
-              Find Events Near You.
+              Find Events Near Me.
               <br />
               Live More,
               <span class="text-orange-500"> Worry Less.</span>
@@ -178,7 +97,7 @@
         <div class="rounded-3xl border border-purple-500/30 bg-[#0b0b0b] p-5 glow-purple">
           <div class="mb-6 flex items-center justify-between">
             <h2 class="text-2xl font-black">Popular Events Near You 🔥</h2>
-            <a href="#" class="text-sm font-bold text-orange-500">View all events →</a>
+            <router-link to="/events" class="text-sm font-bold text-orange-500">View all events →</router-link>
           </div>
 
           <div class="grid gap-5 md:grid-cols-4">
@@ -231,10 +150,10 @@
               Rent equipment, hire vendors, book entertainers, and get everything you need in one place.
             </p>
 
-            <button
-              class="mt-7 w-fit rounded-xl bg-orange-500 px-6 py-4 font-black text-black transition hover:scale-105 glow-orange">
+            <router-link to="/marketplace"
+              class="mt-7 w-fit rounded-xl bg-orange-500 px-6 py-4 font-black text-black transition hover:scale-105 glow-orange inline-block">
               Explore Marketplace →
-            </button>
+            </router-link>
           </div>
 
           <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -347,70 +266,7 @@
         </div>
       </div>
     </section>
-
-    <!-- Footer -->
-    <footer data-aos="fade-up" class="mt-14 border-t border-white/10 bg-[#070707] px-4 py-12 md:px-6 lg:px-8">
-      <div class="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.5fr_1fr_1fr_1fr_1.4fr]">
-        <div>
-          <h2 class="text-3xl font-black">Event<span class="text-orange-500">Oga</span></h2>
-          <p class="mt-4 max-w-xs leading-7 text-gray-400">
-            Find what’s happening near you. Discover trusted events, vendors and local experiences.
-          </p>
-          <p class="mt-8 text-sm text-gray-500">© 2026 EventOga. All rights reserved.</p>
-        </div>
-
-        <div>
-          <h3 class="mb-4 font-black text-white">Quick Links</h3>
-          <ul class="space-y-3 text-sm text-gray-400">
-            <li><a href="#" class="transition hover:text-orange-500">Events</a></li>
-            <li><a href="#" class="transition hover:text-orange-500">Marketplace</a></li>
-            <li><a href="#" class="transition hover:text-orange-500">For Organizers</a></li>
-            <li><a href="#" class="transition hover:text-orange-500">Premium</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 class="mb-4 font-black text-white">Support</h3>
-          <ul class="space-y-3 text-sm text-gray-400">
-            <li><a href="#" class="transition hover:text-orange-500">Help Center</a></li>
-            <li><a href="#" class="transition hover:text-orange-500">Safety Policy</a></li>
-            <li><a href="#" class="transition hover:text-orange-500">Terms & Conditions</a></li>
-            <li><a href="#" class="transition hover:text-orange-500">Privacy Policy</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 class="mb-4 font-black text-white">Follow Us</h3>
-          <div class="flex flex-wrap gap-3">
-            <a href="#"
-              class="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-sm font-black transition hover:bg-orange-500 hover:text-black">f</a>
-            <a href="#"
-              class="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-sm font-black transition hover:bg-orange-500 hover:text-black">x</a>
-            <a href="#"
-              class="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-sm font-black transition hover:bg-orange-500 hover:text-black">ig</a>
-            <a href="#"
-              class="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-sm font-black transition hover:bg-orange-500 hover:text-black">in</a>
-          </div>
-        </div>
-
-        <div>
-          <h3 class="mb-4 font-black text-white">Stay Updated</h3>
-          <p class="mb-4 text-sm leading-6 text-gray-400">
-            Get latest events, deals and organizer updates.
-          </p>
-
-          <div class="flex overflow-hidden rounded-xl bg-white p-1">
-            <input type="email" placeholder="Enter your email" class="w-full px-4 text-sm text-black outline-none" />
-            <button class="rounded-lg bg-orange-500 px-5 py-3 text-sm font-black text-black">Subscribe</button>
-          </div>
-
-          <p class="mt-6 text-sm text-gray-500">
-            Made with <span class="text-orange-500">♥</span> in Nigeria 🇳🇬
-          </p>
-        </div>
-      </div>
-    </footer>
-  </main>
+  </div>
 </template>
 
 <script setup>
@@ -418,8 +274,6 @@ import { ref, onMounted } from 'vue'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import bg1 from '../assets/bg1.png'
-
-const isMenuOpen = ref(false)
 
 const checklist = [
   'Verified organizers & safe locations',
@@ -544,15 +398,5 @@ onMounted(() => {
   box-shadow:
     0 0 20px rgba(255, 106, 0, 0.28),
     0 0 55px rgba(168, 85, 247, 0.22);
-}
-
-.drawer-fade-enter-active,
-.drawer-fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.drawer-fade-enter-from,
-.drawer-fade-leave-to {
-  opacity: 0;
 }
 </style>
