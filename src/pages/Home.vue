@@ -1,32 +1,104 @@
 <template>
   <main class="min-h-screen overflow-hidden bg-[#050505] text-white ">
     <!-- Navbar -->
-    <nav class="flex items-center justify-between px-9 py-4">
-      <div class="flex items-center gap-2 text-3xl font-black">
-        <span>Event<span class="text-orange-500">Oga</span></span>
-        <span class="text-2xl">🎟️</span>
-      </div>
+<nav class="relative z-50 flex items-center justify-between px-5 py-4 md:px-9">
+  <div class="flex items-center gap-2 text-2xl font-black md:text-3xl">
+    <span>Event<span class="text-orange-500">Oga</span></span>
+    <span class="text-2xl">🎟️</span>
+  </div>
 
-      <div class="hidden gap-10 text-sm font-semibold md:flex">
-        <a href="#">Events</a>
-        <a href="#">Marketplace</a>
-        <a href="#">For Organizers</a>
-        <a href="#">Blog</a>
-        <a href="#">About Us⌄</a>
-      </div>
+  <!-- Desktop Menu -->
+  <div class="hidden gap-10 text-sm font-semibold md:flex">
+    <a href="#">Events</a>
+    <a href="#">Marketplace</a>
+    <a href="#">For Organizers</a>
+    <a href="#">Blog</a>
+    <a href="#">About Us⌄</a>
+  </div>
 
-      <div class="hidden items-center gap-3 md:flex">
-        <button class="rounded-xl border border-white/30 px-5 py-3 text-sm font-bold">
-          📍 Lagos⌄
-        </button>
-        <button class="rounded-xl border border-white/30 px-6 py-3 text-sm font-bold">
-          Login
-        </button>
-        <button class="rounded-xl bg-orange-500 px-6 py-3 text-sm font-black text-white">
-          Sign Up
-        </button>
-      </div>
-    </nav>
+  <div class="hidden items-center gap-3 md:flex">
+    <button class="rounded-xl border border-white/30 px-5 py-3 text-sm font-bold">
+      📍 Lagos⌄
+    </button>
+    <button class="rounded-xl border border-white/30 px-6 py-3 text-sm font-bold">
+      Login
+    </button>
+    <button class="rounded-xl bg-orange-500 px-6 py-3 text-sm font-black text-white">
+      Sign Up
+    </button>
+  </div>
+
+  <!-- Mobile Menu Button -->
+  <button
+    @click="isMenuOpen = true"
+    class="grid h-11 w-11 place-items-center rounded-xl border border-white/15 bg-white/5 md:hidden"
+  >
+    <span class="space-y-1.5">
+      <span class="block h-0.5 w-6 bg-white"></span>
+      <span class="block h-0.5 w-6 bg-white"></span>
+      <span class="block h-0.5 w-6 bg-white"></span>
+    </span>
+  </button>
+</nav>
+
+<!-- Mobile Drawer Overlay -->
+<Transition name="drawer-fade">
+  <div
+    v-if="isMenuOpen"
+    class="fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm md:hidden"
+    @click="isMenuOpen = false"
+  >
+    <Transition name="drawer-slide">
+      <aside
+        class="absolute right-0 top-0 h-full w-[85%] max-w-sm border-l border-orange-500/20 bg-[#080808] p-6 shadow-2xl"
+        @click.stop
+      >
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-black">
+            Event<span class="text-orange-500">Oga</span>
+          </h2>
+
+          <button
+            @click="isMenuOpen = false"
+            class="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-2xl"
+          >
+            ×
+          </button>
+        </div>
+
+        <div class="mt-10 flex flex-col gap-4 text-lg font-bold">
+          <a href="#" @click="isMenuOpen = false" class="rounded-2xl bg-white/5 px-5 py-4 hover:bg-orange-500 hover:text-black">
+            Events
+          </a>
+          <a href="#" @click="isMenuOpen = false" class="rounded-2xl bg-white/5 px-5 py-4 hover:bg-orange-500 hover:text-black">
+            Marketplace
+          </a>
+          <a href="#" @click="isMenuOpen = false" class="rounded-2xl bg-white/5 px-5 py-4 hover:bg-orange-500 hover:text-black">
+            For Organizers
+          </a>
+          <a href="#" @click="isMenuOpen = false" class="rounded-2xl bg-white/5 px-5 py-4 hover:bg-orange-500 hover:text-black">
+            Blog
+          </a>
+          <a href="#" @click="isMenuOpen = false" class="rounded-2xl bg-white/5 px-5 py-4 hover:bg-orange-500 hover:text-black">
+            About Us
+          </a>
+        </div>
+
+        <div class="mt-10 space-y-3">
+          <button class="w-full rounded-xl border border-white/20 px-5 py-4 font-bold">
+            📍 Lagos
+          </button>
+          <button class="w-full rounded-xl border border-white/20 px-5 py-4 font-bold">
+            Login
+          </button>
+          <button class="w-full rounded-xl bg-orange-500 px-5 py-4 font-black text-black">
+            Sign Up
+          </button>
+        </div>
+      </aside>
+    </Transition>
+  </div>
+</Transition>
 
     <!-- Header -->
     <section class="relative px-9 pt-14">
@@ -425,6 +497,9 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
+const isMenuOpen = ref(false)
 const categories = [
   { name: 'Parties', icon: 'parties' },
   { name: 'Concerts', icon: 'concerts' },
@@ -497,3 +572,25 @@ const vendors = [
   { name: 'Prime Rentals', type: 'Equipment', image: bg1 },
 ]
 </script>
+
+<style scoped>
+.drawer-fade-enter-active,
+.drawer-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.drawer-fade-enter-from,
+.drawer-fade-leave-to {
+  opacity: 0;
+}
+
+.drawer-slide-enter-active,
+.drawer-slide-leave-active {
+  transition: transform 0.35s ease;
+}
+
+.drawer-slide-enter-from,
+.drawer-slide-leave-to {
+  transform: translateX(100%);
+}
+</style>
