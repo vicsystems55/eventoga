@@ -221,8 +221,10 @@
             <button class="rounded-lg bg-orange-500 px-5 py-3 text-sm font-black text-black">Subscribe</button>
           </div>
 
-          <p class="mt-6 text-sm text-gray-500">
-            Made with <span class="text-orange-500">♥</span> in Nigeria 🇳🇬
+          <p class="mt-6 text-sm text-gray-500"> <a href="https://vicsystems.us">
+
+            Made by VicSystems Technologies Ltd.
+          </a>
           </p>
         </div>
       </div>

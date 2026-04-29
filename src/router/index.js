@@ -10,9 +10,15 @@ const routes = [
     meta: { layout: "default" },
     children: [
       {
-        path: "",
+        path: "/",
         name: "Home",
-        component: Home,
+        component: () => import("../pages/Home.vue"),
+        meta: {
+          title: "EventOga | Discover Events Near You in Nigeria",
+          description:
+            "Find trusted events, parties, seminars, concerts and experiences near you with EventOga.",
+          image: "https://eventoga.netlify.app/seo-image.png",
+        },
       },
       {
         path: "auth",
@@ -29,7 +35,7 @@ const routes = [
         name: "Organizers",
         component: () => import("../pages/organizersPage.vue"),
       },
-            {
+      {
         path: "upgrade",
         name: "Upgrade",
         component: () => import("../pages/Upgrade.vue"),
@@ -72,7 +78,7 @@ const routes = [
         component: () => import("../pages/dashboard/Analytics.vue"),
       },
 
-            {
+      {
         path: "accounts",
         name: "Accounts",
         component: () => import("../pages/dashboard/Accounts.vue"),

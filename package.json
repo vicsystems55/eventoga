@@ -12,6 +12,8 @@
     "@heroicons/vue": "^2.2.0",
     "@paystack/inline-js": "^2.22.8",
     "@tailwindcss/vite": "^4.2.4",
+    "@unhead/addons": "^3.1.0",
+    "@unhead/vue": "^3.1.0",
     "@vuepic/vue-datepicker": "^12.1.0",
     "aos": "^3.0.0-beta.6",
     "apexcharts": "^5.10.6",
