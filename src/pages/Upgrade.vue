@@ -186,6 +186,7 @@
 import { computed, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import crown from '../assets/crown.png'
+import PaystackPop from '@paystack/inline-js'
 
 const route = useRoute()
 const trialDays = 30
@@ -266,9 +267,49 @@ const formattedPrice = computed(() => {
 })
 
 const payWithPaystack = () => {
-  console.log('Form:', form)
-  console.log('Selected plan:', plan.value)
+  if (!form.email || !form.name || !form.phone) {
+    alert('Please fill in your name, email and phone number')
+    return
+  }
+
+  const paystack = new PaystackPop()
+
+  paystack.newTransaction({
+    key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
+    email: form.email,
+    amount: 100 * 100, // ₦100 card authorization / test charge
+    currency: 'NGN',
+    metadata: {
+      plan: plan.value.slug,
+      name: form.name,
+      phone: form.phone,
+      organization: form.organization,
+    },
+    onSuccess: async (transaction) => {
+      console.log(transaction.reference)
+
+      // Send reference to Laravel for verification
+      await fetch('http://localhost:8000/api/subscriptions/verify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          reference: transaction.reference,
+          plan: plan.value.slug,
+          user: form,
+        }),
+      })
+
+      alert('Subscription started successfully')
+    },
+    onCancel: () => {
+      alert('Payment cancelled')
+    },
+  })
 }
+
 </script>
 
 <style scoped>
