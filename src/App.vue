@@ -12,12 +12,12 @@ const route = useRoute()
 const siteName = 'EventOga'
 const defaultTitle = 'EventOga | Discover Events Near You'
 const defaultDescription = 'Discover trusted events, organizers, vendors and experiences near you.'
-const defaultImage = 'https://yourdomain.com/seo/default-og.jpg'
+const defaultImage = 'https://eventoga.netlify.app/seo-image.png'
 
 const title = computed(() => route.meta.title || defaultTitle)
 const description = computed(() => route.meta.description || defaultDescription)
 const image = computed(() => route.meta.image || defaultImage)
-const url = computed(() => `https://yourdomain.com${route.fullPath}`)
+const url = computed(() => `https://eventoga.netlify.app${route.fullPath}`)
 
 useHead({
   title: computed(() => title.value),
