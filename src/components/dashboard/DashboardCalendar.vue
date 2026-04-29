@@ -6,7 +6,7 @@
         </div>
 
         <VueDatePicker v-model="selectedDate" inline auto-apply dark :enable-time-picker="false"
-            :highlight="highlightedDates" class="eventoga-calendar w-full" />
+            :highlight="highlightedDates" class="eventoga-calendar w-ful" />
 
         <div class="mt-4 space-y-3">
             <div v-for="event in upcomingEvents" :key="event.title"

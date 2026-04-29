@@ -32,7 +32,13 @@
         >
           Marketplace
         </router-link>
-        <a href="#" class="hover:text-orange-500 transition">For Organizers</a>
+        <router-link
+          to="/organizers"
+          :class="isActive('/organizers') ? 'text-orange-500' : 'text-white hover:text-orange-500'"
+          class="transition"
+        >
+          For Organizers
+        </router-link>
         <router-link
           to="/about"
           :class="isActive('/about') ? 'text-orange-500' : 'text-white hover:text-orange-500'"
@@ -115,9 +121,14 @@
               >
                 Marketplace
               </router-link>
-              <a href="#" class="block py-3 text-white hover:text-orange-500 transition">
+              <router-link
+                to="/organizers"
+                @click="isMenuOpen = false"
+                :class="isActive('/organizers') ? 'text-orange-500 font-black' : 'text-white'"
+                class="block py-3 transition"
+              >
                 For Organizers
-              </a>
+              </router-link>
               <router-link
                 to="/about"
                 @click="isMenuOpen = false"

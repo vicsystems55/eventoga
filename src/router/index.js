@@ -25,6 +25,11 @@ const routes = [
         component: () => import("../pages/eventsPage.vue"),
       },
       {
+        path: "organizers",
+        name: "Organizers",
+        component: () => import("../pages/organizersPage.vue"),
+      },
+      {
         path: "marketplace",
         name: "Marketplace",
         component: () => import("../pages/marketplacePage.vue"),
@@ -60,6 +65,12 @@ const routes = [
         path: "analytics",
         name: "Analytics",
         component: () => import("../pages/dashboard/Analytics.vue"),
+      },
+
+            {
+        path: "accounts",
+        name: "Accounts",
+        component: () => import("../pages/dashboard/Accounts.vue"),
       },
       {
         path: "settings",

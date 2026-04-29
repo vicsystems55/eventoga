@@ -191,6 +191,7 @@ const menuItems = [
   { label: 'Tickets / Sales', path: '/dashboard/bookings', icon: TicketIcon },
   { label: 'Marketplace', path: '/dashboard/marketplace', icon: StoreIcon },
   { label: 'Analytics', path: '/dashboard/analytics', icon: ChartIcon },
+  { label: 'Accounts', path: '/dashboard/accounts', icon: ChartIcon },
   { label: 'Messages', path: '/dashboard/messages', icon: MessageIcon },
   { label: 'Settings', path: '/dashboard/settings', icon: SettingsIcon },
 ]
