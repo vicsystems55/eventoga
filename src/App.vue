@@ -1,11 +1,13 @@
 <template>
   <router-view />
+    <EventogaFM />
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useSeoMeta, useHead } from '@unhead/vue'
+import EventogaFM from './components/EventogaFM.vue'
 
 const route = useRoute()
 
