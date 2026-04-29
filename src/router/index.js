@@ -29,6 +29,11 @@ const routes = [
         name: "Organizers",
         component: () => import("../pages/organizersPage.vue"),
       },
+            {
+        path: "upgrade",
+        name: "Upgrade",
+        component: () => import("../pages/Upgrade.vue"),
+      },
       {
         path: "marketplace",
         name: "Marketplace",

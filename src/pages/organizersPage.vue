@@ -57,7 +57,7 @@
                             : 'border-purple-500/35 hover:shadow-[0_0_35px_rgba(168,85,247,0.2)]'">
                     <span v-if="plan.popular"
                         class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-orange-500 px-5 py-2 text-xs font-black text-white">
-                        MOST POPULAR 🔥
+                        MOST POPULAR
                     </span>
 
                     <div class="mb-5 grid h-16 w-16 place-items-center rounded-2xl"
@@ -65,15 +65,20 @@
                         <component :is="plan.icon" />
                     </div>
 
-<Transition name="price-fade" mode="out-in">
-  <div :key="billing + plan.name" class="mt-4">
-    <span class="text-4xl font-black">{{ plan.displayPrice }}</span>
-    <span v-if="plan.period" class="text-gray-400">{{ plan.period }}</span>
-  </div>
-</Transition>
+                    <Transition name="price-fade" mode="out-in">
+                        <div :key="billing + plan.name" class="mt-4">
+                            <span class="text-4xl font-black">{{ plan.displayPrice }}</span>
+                            <span v-if="plan.period" class="text-gray-400">{{ plan.period }}</span>
+                        </div>
+                    </Transition>
 
                     <p class="mt-4 min-h-[56px] leading-7 text-gray-300">
                         {{ plan.description }}
+                    </p>
+
+                    <p v-if="plan.trial"
+                        class="mt-4 inline-flex rounded-full bg-green-500/10 px-4 py-2 text-xs font-black text-green-400">
+                        {{ plan.trial }}
                     </p>
 
                     <div class="my-6 border-t border-white/10"></div>
@@ -90,14 +95,19 @@
                         </li>
                     </ul>
 
-                    <button class="mt-10 w-full rounded-xl border px-5 py-4 font-black transition hover:scale-105"
-                        :class="plan.popular
-                            ? 'border-orange-500 bg-gradient-to-r from-orange-500 to-pink-600 text-white glow-orange'
-                            : plan.color === 'orange'
-                                ? 'border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-black'
-                                : 'border-purple-500 text-purple-300 hover:bg-purple-500 hover:text-black'">
-                        {{ plan.cta }}
-                    </button>
+                    <router-link :to="{
+                        name: 'Upgrade',
+                        query: { plan: plan.name.toLowerCase() }
+                    }">
+                        <button class="mt-10 w-full rounded-xl border px-5 py-4 font-black transition hover:scale-105"
+                            :class="plan.popular
+                                ? 'border-orange-500 bg-gradient-to-r from-orange-500 to-pink-600 text-white glow-orange'
+                                : plan.color === 'orange'
+                                    ? 'border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-black'
+                                    : 'border-purple-500 text-purple-300 hover:bg-purple-500 hover:text-black'">
+                            {{ plan.cta }}
+                        </button>
+                    </router-link>
 
                     <p v-if="plan.note" class="mt-4 text-center text-xs text-gray-500">
                         {{ plan.note }}
@@ -178,6 +188,10 @@ const computedPlans = computed(() => {
                 billing.value === 'yearly' && plan.monthly
                     ? `₦${Math.round(monthlyPrice * 12).toLocaleString()} billed yearly · Save 30%`
                     : '',
+            cta:
+                plan.trial
+                    ? `Start ${plan.trial}`
+                    : plan.cta,
         }
     })
 })
@@ -254,6 +268,7 @@ const plans = [
         monthly: 5000,
         yearly: 5000 * 12,
         description: 'Everything you need to grow your events and audience.',
+        trial: '30-day free trial',
         features: [
             'Unlimited events',
             'Standard event listing',
@@ -269,6 +284,7 @@ const plans = [
         name: 'Pro',
         monthly: 15000,
         yearly: 15000 * 12,
+        trial: '30-day free trial',
         description: 'Advanced tools to boost visibility and maximize ticket sales.',
         features: [
             'Everything in Basic',
@@ -338,16 +354,16 @@ const trustItems = [
 
 .price-fade-enter-active,
 .price-fade-leave-active {
-  transition: all 0.25s ease;
+    transition: all 0.25s ease;
 }
 
 .price-fade-enter-from {
-  opacity: 0;
-  transform: translateY(8px);
+    opacity: 0;
+    transform: translateY(8px);
 }
 
 .price-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-8px);
+    opacity: 0;
+    transform: translateY(-8px);
 }
 </style>
