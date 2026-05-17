@@ -1,157 +1,582 @@
 <template>
-    <main class="ambient-bg min-h-screen text-white">
-        <!-- Hero -->
-        <section class="w-full px-4 py-16 md:px-6 lg:px-8">
-            <div class="mx-auto max-w-7xl text-center">
-                <h1 class="text-5xl font-black md:text-7xl">
-                    For <span
-                        class="bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent">Organizers</span>
-                </h1>
+    <main class="min-h-screen ambient-bg text-white">
+        <!-- HERO -->
+        <section class="relative overflow-hidden px-4 pt-10 md:px-6 lg:px-8">
+            <!-- full background image behind the card -->
+            <div class="absolute inset-0 hidden bg-cover bg-center bg-no-repeat opacity-80 lg:block"
+                :style="{ backgroundImage: `url(${organizerBg})` }"></div>
 
-                <p class="mx-auto mt-4 max-w-2xl text-lg text-gray-300">
-                    Everything you need to create, manage and grow unforgettable events.
+            <!-- page-level dark overlay -->
+            <!-- <div class="absolute inset-0 hidden bg-black/45 lg:block"></div> -->
+
+            <div class="relative z-10 mx-auto max-w-7xl overflow-hidden ">
+                <!-- extra fade inside card -->
+                <!-- <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div> -->
+
+                <!-- ambient glows -->
+                <!-- <div class="absolute -left-20 top-10 h-72 w-72 rounded-full bg-orange-500/15 blur-3xl"></div>
+                <div class="absolute right-10 top-0 h-80 w-80 rounded-full bg-purple-500/20 blur-3xl"></div> -->
+
+                <!-- content -->
+                <div class="relative z-10 flex min-h-[720px] items-center">
+                    <div class="w-full max-w-3xl px-8 py-14 md:px-14">
+                        <p
+                            class="inline-flex rounded-full border border-orange-500/30 bg-orange-500/10 px-5 py-2 text-sm font-black uppercase tracking-wide text-orange-500">
+                            For Organizers
+                        </p>
+
+                        <h1 class="mt-6 text-5xl font-black leading-tight md:text-7xl">
+                            Create, Promote &
+                            <span class="text-orange-500">Profit</span>
+                            from Your Events
+                        </h1>
+
+                        <p class="mt-6 max-w-2xl text-lg leading-8 text-gray-300 md:text-xl">
+                            Launch free or paid events, grow your audience, sell tickets, and
+                            receive secure payouts — all from one powerful platform built for
+                            Nigerian organizers.
+                        </p>
+
+                        <div class="mt-8 flex flex-wrap gap-4">
+                            <button
+                                class="rounded-xl bg-orange-500 px-8 py-4 font-black text-white transition hover:scale-105 glow-orange">
+                                Start Free →
+                            </button>
+
+                            <a href="#pricing"
+                                class="rounded-xl border border-purple-500/40 px-8 py-4 font-black text-purple-300 transition hover:bg-purple-500/10 glow-purple-soft">
+                                See Pricing →
+                            </a>
+                        </div>
+
+                        <div class="mt-10 grid gap-4 sm:grid-cols-3">
+                            <MiniBadge icon="percent" title="3% Commission" />
+                            <MiniBadge icon="shield" title="Secure Payments" />
+                            <MiniBadge icon="wallet" title="Payouts in 24–72 hrs" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- floating cards -->
+                <div
+                    class="absolute right-10 top-16 z-20 hidden rounded-2xl border border-white/10 bg-black/60 p-5 backdrop-blur lg:block glow-purple">
+                    <p class="text-lg text-gray-300">Waitlist Progress</p>
+                    <h3 class="mt-2 text-3xl font-black">7 / 10</h3>
+                    <p class="mt-1 text-xs text-green-400">3 more to publish</p>
+
+                    <div class="mt-4 h-2 w-44 rounded-full bg-white/10">
+                        <div class="h-full w-[70%] rounded-full bg-purple-500"></div>
+                    </div>
+                </div>
+
+                <div
+                    class="absolute bottom-16 right-8 z-20 hidden rounded-2xl border border-white/10 bg-black/60 p-5 backdrop-blur lg:block glow-orange">
+                    <p class="text-sm text-gray-300">Upcoming Payout</p>
+                    <h3 class="mt-2 text-3xl font-black">₦48,500</h3>
+                    <p class="mt-1 text-xs text-green-400">Estimated in 24–72 hrs</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- HOW EVENTOGA WORKS -->
+        <section class="mt-12 w-full px-4 md:px-6 lg:px-8">
+            <div
+                class="mx-auto max-w-7xl overflow-hidden rounded-3xl border border-purple-500/30 bg-[#050505]/90 px-8 py-8 shadow-[0_0_60px_rgba(168,85,247,0.12)]">
+                <!-- Heading -->
+                <p class="text-center text-lg font-black uppercase tracking-wider text-white-200">
+                    How EventOga Works
                 </p>
 
-                <div class="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-3">
-                    <div v-for="item in benefits" :key="item.title" class="flex items-center gap-4 text-left">
-                        <div class="grid h-12 w-12 place-items-center rounded-2xl bg-orange-500/10 text-orange-500">
-                            <component :is="item.icon" />
+                <div class="mt-3 grid items-center gap-6 lg:grid-cols-[1fr_auto_1fr_auto_1fr]">
+                    <!-- STEP 1 -->
+                    <div class="flex items-center gap-4">
+                        <!-- number -->
+                        <div
+                            class="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-purple-500/40 bg-purple-500/10 text-sm font-black text-purple-300">
+                            1
                         </div>
+
+                        <!-- icon -->
+                        <div
+                            class="grid h-20 w-20 shrink-0 place-items-center rounded-full border border-purple-500/40 bg-purple-500/10 shadow-[0_0_20px_rgba(168,85,247,0.12)]">
+                            <div class="text-purple-400">
+                                <svg class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="1.8"
+                                    viewBox="0 0 24 24">
+                                    <rect x="3" y="5" width="18" height="16" rx="2" />
+                                    <path d="M16 3v4M8 3v4M3 11h18" />
+                                </svg>
+                            </div>
+                        </div>
+
                         <div>
-                            <h3 class="font-black">{{ item.title }}</h3>
-                            <p class="text-sm text-gray-400">{{ item.text }}</p>
+                            <h3 class="text-xl font-black">Create Event</h3>
+
+                            <div class="mt-4 space-y-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <img src="../assets/check1.png" class="h-4 w-4" />
+                                    <span class="text-sm text-gray-300">Free or paid events</span>
+                                </div>
+
+                                <div class="flex items-center gap-2.5">
+                                    <img src="../assets/check1.png" class="h-4 w-4" />
+                                    <span class="text-sm text-gray-300">Set ticket types & prices</span>
+                                </div>
+
+                                <div class="flex items-center gap-2.5">
+                                    <img src="../assets/check1.png" class="h-4 w-4" />
+                                    <span class="text-sm text-gray-300">Smart organizer dashboard</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Billing Toggle -->
-                <div
-                    class="mx-auto mt-10 flex w-fit items-center rounded-2xl border border-purple-500/40 bg-black/40 p-1">
-                    <button @click="billing = 'yearly'"
-                        class="rounded-xl px-8 py-3 text-sm font-bold transition-all duration-300"
-                        :class="billing === 'yearly' ? 'bg-purple-600 text-white glow-purple scale-105' : 'text-gray-400'">
-                        Yearly
-                    </button>
+                    <!-- ARROW -->
+                    <div class="hidden lg:block">
+                        <img src="../assets/arrow2.png" class="h-9 w-auto opacity-90" />
+                    </div>
 
-                    <button @click="billing = 'monthly'"
-                        class="rounded-xl px-8 py-3 text-sm font-bold transition-all duration-300"
-                        :class="billing === 'monthly' ? 'bg-orange-500 text-white glow-orange scale-105' : 'text-gray-400'">
-                        Monthly
-                    </button>
+                    <!-- STEP 2 -->
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-orange-500/40 bg-orange-500/10 text-sm font-black text-orange-400">
+                            2
+                        </div>
 
-                    <span class="ml-2 rounded-full bg-green-500/20 px-3 py-1 text-xs font-bold text-green-400">
-                        Save 30%
-                    </span>
+                        <div
+                            class="grid h-20 w-20 shrink-0 place-items-center rounded-full border border-orange-500/40 bg-orange-500/10 shadow-[0_0_20px_rgba(255,106,0,0.12)]">
+                            <div class="text-orange-400">
+                                <svg class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="1.8"
+                                    viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 00-3-3.87M7 21v-2a4 4 0 013-3.87" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-black">Grow Audience</h3>
+
+                            <div class="mt-4 space-y-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <img src="../assets/check2.png" class="h-4 w-4" />
+                                    <span class="text-sm text-gray-300">Waitlist or instant publish</span>
+                                </div>
+
+                                <div class="flex items-center gap-2.5">
+                                    <img src="../assets/check2.png" class="h-4 w-4" />
+                                    <span class="text-sm text-gray-300">Subscription benefits</span>
+                                </div>
+
+                                <div class="flex items-center gap-2.5">
+                                    <img src="../assets/check2.png" class="h-4 w-4" />
+                                    <span class="text-sm text-gray-300">Boost & get discovered</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARROW -->
+                    <div class="hidden lg:block">
+                        <img src="../assets/arrow1.png" class="h-9 w-auto opacity-90" />
+                    </div>
+
+                    <!-- STEP 3 -->
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-purple-500/40 bg-purple-500/10 text-sm font-black text-purple-300">
+                            3
+                        </div>
+
+                        <div
+                            class="grid h-20 w-20 shrink-0 place-items-center rounded-full border border-purple-500/40 bg-purple-500/10 shadow-[0_0_20px_rgba(168,85,247,0.12)]">
+                            <div class="text-purple-400">
+                                <svg class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="1.8"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M4 7a2 2 0 012-2h12a2 2 0 012 2v3a2 2 0 010 4v3a2 2 0 01-2 2H6a2 2 0 01-2-2v-3a2 2 0 010-4V7z" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-black leading-tight">
+                                Sell Tickets & Get Paid
+                            </h3>
+
+                            <div class="mt-4 space-y-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <img src="../assets/check1.png" class="h-4 w-4" />
+                                    <span class="text-sm text-gray-300">Secure ticket sales</span>
+                                </div>
+
+                                <div class="flex items-center gap-2.5">
+                                    <img src="../assets/check1.png" class="h-4 w-4" />
+                                    <span class="text-sm text-gray-300">3% platform commission</span>
+                                </div>
+
+                                <div class="flex items-center gap-2.5">
+                                    <img src="../assets/check1.png" class="h-4 w-4" />
+                                    <span class="text-sm text-gray-300">Payouts in 24–72 hrs</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Pricing Cards -->
-        <section class="w-full px-4 pb-10 md:px-6 lg:px-8">
-            <div class="mx-auto grid max-w-7xl gap-6 md:grid-cols-2 xl:grid-cols-4">
-                <div v-for="plan in computedPlans" :key="plan.name"
-                    class="relative rounded-3xl border bg-[#080808]/90 p-7 transition hover:-translate-y-2" :class="plan.popular
-                        ? 'border-orange-500/70 glow-mix'
-                        : plan.color === 'orange'
-                            ? 'border-orange-500/35 hover:shadow-[0_0_35px_rgba(255,106,0,0.2)]'
-                            : 'border-purple-500/35 hover:shadow-[0_0_35px_rgba(168,85,247,0.2)]'">
-                    <span v-if="plan.popular"
-                        class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-orange-500 px-5 py-2 text-xs font-black text-white">
-                        MOST POPULAR
-                    </span>
+ <!-- FREE MODEL -->
+<section class="mt-6 w-full px-4 md:px-6 lg:px-8">
+  <div
+    class="relative mx-auto max-w-7xl overflow-hidden rounded-3xl border border-orange-500/20 bg-[#090909]/90 p-5 shadow-[0_0_50px_rgba(255,106,0,0.06)]"
+  >
+    <!-- Ambient lighting -->
+    <div class="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-orange-500/10 blur-3xl"></div>
+    <div class="absolute -top-20 right-0 h-72 w-72 rounded-full bg-purple-500/10 blur-3xl"></div>
+    <div class="absolute bottom-0 left-1/2 h-48 w-96 -translate-x-1/2 rounded-full bg-orange-500/5 blur-3xl"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.015),transparent_60%)]"></div>
 
-                    <div class="mb-5 grid h-16 w-16 place-items-center rounded-2xl"
-                        :class="plan.color === 'orange' ? 'bg-orange-500/15 text-orange-500' : 'bg-purple-500/15 text-purple-400'">
-                        <component :is="plan.icon" />
-                    </div>
+    <div class="relative z-10">
+      <!-- Heading -->
+      <div class="text-center">
+        <h2 class="text-2xl font-black">
+          Free Model <span class="text-orange-500">Explained</span>
+        </h2>
 
-                    <Transition name="price-fade" mode="out-in">
-                        <div :key="billing + plan.name" class="mt-4">
-                            <span class="text-4xl font-black">{{ plan.displayPrice }}</span>
-                            <span v-if="plan.period" class="text-gray-400">{{ plan.period }}</span>
-                        </div>
-                    </Transition>
+        <p class="mt-1 text-sm text-gray-400">
+          Create events for free and publish when your audience is ready.
+        </p>
+      </div>
 
-                    <p class="mt-4 min-h-[56px] leading-7 text-gray-300">
-                        {{ plan.description }}
-                    </p>
+      <div class="mt-6 grid gap-4 lg:grid-cols-[1.4fr_auto_1fr]">
+        <!-- WAITLIST -->
+        <div
+          class="relative rounded-3xl border border-purple-500/20 bg-black/25 p-5 backdrop-blur-sm shadow-[inset_0_0_30px_rgba(168,85,247,0.03)]"
+        >
+          <h3 class="text-center text-lg font-black text-purple-400">
+            Waitlist Publishing
+          </h3>
 
-                    <p v-if="plan.trial"
-                        class="mt-4 inline-flex rounded-full bg-green-500/10 px-4 py-2 text-xs font-black text-green-400">
-                        {{ plan.trial }}
-                    </p>
+          <div
+            class="mt-6 grid items-center gap-3 md:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr]"
+          >
+            <!-- Step 1 -->
+            <div class="text-center">
+              <div
+                class="mx-auto grid h-18 w-18 place-items-center rounded-full border border-purple-500/40 bg-purple-500/10 shadow-[0_0_18px_rgba(168,85,247,0.1)]"
+              >
+                <svg
+                  class="h-8 w-8 text-purple-400"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  viewBox="0 0 24 24"
+                >
+                  <rect x="3" y="5" width="18" height="16" rx="2" />
+                  <path d="M16 3v4M8 3v4M3 11h18" />
+                </svg>
+              </div>
 
-                    <div class="my-6 border-t border-white/10"></div>
-
-                    <ul class="space-y-3">
-                        <li v-for="feature in plan.features" :key="feature" class="flex gap-3 text-sm">
-                            <svg class="mt-0.5 h-5 w-5 flex-shrink-0"
-                                :class="plan.color === 'orange' ? 'stroke-orange-500' : 'stroke-purple-400'" fill="none"
-                                stroke-width="2" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="9" />
-                                <path d="M9 12l2 2 4-4" />
-                            </svg>
-                            {{ feature }}
-                        </li>
-                    </ul>
-
-                    <router-link :to="{
-                        name: 'Upgrade',
-                        query: { plan: plan.name.toLowerCase() }
-                    }">
-                        <button class="mt-10 w-full rounded-xl border px-5 py-4 font-black transition hover:scale-105"
-                            :class="plan.popular
-                                ? 'border-orange-500 bg-gradient-to-r from-orange-500 to-pink-600 text-white glow-orange'
-                                : plan.color === 'orange'
-                                    ? 'border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-black'
-                                    : 'border-purple-500 text-purple-300 hover:bg-purple-500 hover:text-black'">
-                            {{ plan.cta }}
-                        </button>
-                    </router-link>
-
-                    <p v-if="plan.note" class="mt-4 text-center text-xs text-gray-500">
-                        {{ plan.note }}
-                    </p>
-                </div>
+              <p class="mt-2 text-xs font-bold">Create Event</p>
             </div>
-        </section>
 
-        <!-- Trust Features -->
-        <section class="w-full px-4 py-8 md:px-6 lg:px-8">
-            <div
-                class="mx-auto grid max-w-7xl gap-4 rounded-3xl border border-white/10 bg-[#080808]/80 p-6 glow-panel md:grid-cols-4">
-                <div v-for="trust in trustItems" :key="trust.title" class="flex items-center gap-4">
-                    <div class="grid h-14 w-14 place-items-center rounded-2xl"
-                        :class="trust.color === 'orange' ? 'bg-orange-500/10 text-orange-500' : 'bg-purple-500/10 text-purple-400'">
-                        <component :is="trust.icon" />
-                    </div>
+            <div class="hidden md:block">
+              <img src="../assets/arrow1.png" class="h-5 w-auto opacity-80" />
+            </div>
 
+            <!-- Step 2 -->
+            <div class="text-center">
+              <div
+                class="mx-auto grid h-18 w-18 place-items-center rounded-full border border-purple-500/40 bg-purple-500/10 shadow-[0_0_18px_rgba(168,85,247,0.1)]"
+              >
+                <svg
+                  class="h-8 w-8 text-purple-400"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M17 21v-2a4 4 0 00-3-3.87M7 21v-2a4 4 0 013-3.87" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </div>
+
+              <p class="mt-2 text-xs font-bold">Waitlist Opens</p>
+            </div>
+
+            <div class="hidden md:block">
+              <img src="../assets/arrow1.png" class="h-5 w-auto opacity-80" />
+            </div>
+
+            <!-- Step 3 -->
+            <div class="text-center">
+              <div
+                class="mx-auto grid h-18 w-18 place-items-center rounded-full border border-orange-500/40 bg-orange-500/10 shadow-[0_0_18px_rgba(255,106,0,0.1)]"
+              >
+                <svg
+                  class="h-8 w-8 text-orange-400"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M17 21v-2a4 4 0 00-3-3.87M7 21v-2a4 4 0 013-3.87" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </div>
+
+              <p class="mt-2 text-xs font-bold">10 Verified Joins</p>
+            </div>
+
+            <div class="hidden md:block">
+              <img src="../assets/arrow1.png" class="h-5 w-auto opacity-80" />
+            </div>
+
+            <!-- Step 4 -->
+            <div class="text-center">
+              <div
+                class="mx-auto grid h-18 w-18 place-items-center rounded-full border border-orange-500/40 bg-orange-500/10 shadow-[0_0_18px_rgba(255,106,0,0.1)]"
+              >
+                <svg
+                  class="h-8 w-8 text-orange-400"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 15l-3 3m3-3l3 3M12 15c4-2 6-6 7-12-6 1-10 3-12 7l-3 1 4 4 1-3z" />
+                </svg>
+              </div>
+
+              <p class="mt-2 text-xs font-bold">Auto Publish</p>
+            </div>
+          </div>
+
+          <p class="mt-5 text-center text-xs text-gray-400">
+            Waitlist expires after
+            <span class="font-bold text-orange-500">14 days</span>
+            if 10 joins are not reached.
+          </p>
+        </div>
+
+        <!-- OR -->
+        <div class="grid place-items-center">
+          <span
+            class="rounded-full border border-white/10 bg-black/60 px-4 py-4 text-sm font-black shadow-[0_0_25px_rgba(255,255,255,0.04)]"
+          >
+            OR
+          </span>
+        </div>
+
+        <!-- INSTANT -->
+        <div
+          class="relative rounded-3xl border border-orange-500/20 bg-black/25 p-5 backdrop-blur-sm shadow-[inset_0_0_30px_rgba(255,106,0,0.03)]"
+        >
+          <h3 class="text-center text-lg font-black text-orange-500">
+            Instant Publish
+          </h3>
+
+          <div class="mt-6 grid items-center gap-3 md:grid-cols-3">
+            <div class="text-center">
+              <div
+                class="mx-auto grid h-18 w-18 place-items-center rounded-full border border-orange-500/40 bg-orange-500/10 shadow-[0_0_18px_rgba(255,106,0,0.1)]"
+              >
+                <svg
+                  class="h-8 w-8 text-orange-400"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" />
+                </svg>
+              </div>
+
+              <p class="mt-2 text-xs font-bold">Pay 200 Orbs</p>
+              <p class="text-xs font-bold text-orange-400">₦2,000</p>
+            </div>
+
+            <div class="hidden text-center md:block">
+              <img
+                src="../assets/arrow1.png"
+                class="mx-auto h-5 w-auto opacity-80"
+              />
+            </div>
+
+            <div class="text-center">
+              <div
+                class="mx-auto grid h-18 w-18 place-items-center rounded-full border border-purple-500/40 bg-purple-500/10 shadow-[0_0_18px_rgba(168,85,247,0.1)]"
+              >
+                <svg
+                  class="h-8 w-8 text-purple-400"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 15l-3 3m3-3l3 3M12 15c4-2 6-6 7-12-6 1-10 3-12 7l-3 1 4 4 1-3z" />
+                </svg>
+              </div>
+
+              <p class="mt-2 text-xs font-bold">Instant Publish</p>
+            </div>
+          </div>
+
+          <p class="mt-5 text-center text-xs text-gray-400">
+            Skip the wait and go live instantly.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+        <!-- PRICING -->
+        <section id="pricing" class="mt-8 w-full px-4 md:px-6 lg:px-8">
+            <div class="mx-auto max-w-7xl rounded-3xl border border-purple-500/30 bg-[#080808]/80 p-6 glow-purple">
+                <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                     <div>
-                        <h3 class="font-black">{{ trust.title }}</h3>
-                        <p class="text-sm text-gray-400">{{ trust.text }}</p>
+                        <h2 class="text-3xl font-black">Choose the plan that grows with you</h2>
+                        <p class="mt-2 text-gray-400">All paid plans include 3% ticket commission.</p>
                     </div>
+
+                    <div class="flex w-fit rounded-full border border-purple-500/40 bg-black p-1">
+                        <button class="rounded-full px-5 py-2 text-sm text-gray-300">Monthly</button>
+                        <button
+                            class="rounded-full bg-purple-600 px-5 py-2 text-sm font-bold text-white">Yearly</button>
+                    </div>
+                </div>
+
+                <div class="mt-8 grid gap-5 lg:grid-cols-4">
+                    <PricingCard name="Free" price="₦0" sub="/month" orb="0 Orbs" color="purple" button="Start Free"
+                        :features="[
+                            '2 active waitlist events',
+                            'Waitlist threshold: 10',
+                            'Waitlist expiry: 14 days',
+                            'Standard listing',
+                            'Basic organizer profile',
+                            '3% ticket commission',
+                            'Instant publish: 200 Orbs'
+                        ]" />
+
+                    <PricingCard name="Basic" price="₦10,000" sub="/month" orb="1,000 Orbs" color="orange"
+                        button="Choose Basic" :features="[
+                            'Up to 5 published events/month',
+                            'Instant publishing included',
+                            'Standard analytics',
+                            'Event editing',
+                            'Organizer dashboard access',
+                            '3% ticket commission'
+                        ]" />
+
+                    <PricingCard name="Growth" price="₦25,000" sub="/month" orb="2,500 Orbs" color="purple"
+                        button="Choose Growth" badge="Most Popular" :features="[
+                            'Up to 15 published events/month',
+                            'Instant publishing included',
+                            'Enhanced analytics',
+                            'Attendee insights',
+                            'Priority support',
+                            '3% ticket commission'
+                        ]" />
+
+                    <PricingCard name="Pro" price="₦50,000" sub="/month" orb="5,000 Orbs" color="orange" button="Go Pro"
+                        :features="[
+                            'Unlimited events',
+                            'Advanced analytics',
+                            'Custom branding',
+                            'Featured listing discounts',
+                            'Faster payout queue',
+                            'Premium support',
+                            '3% ticket commission'
+                        ]" />
                 </div>
             </div>
         </section>
 
-        <!-- CTA -->
-        <section class="w-full px-4 pb-16 pt-4 md:px-6 lg:px-8">
+        <!-- EVENTORBS -->
+        <section class="mt-8 w-full px-4 md:px-6 lg:px-8">
             <div
-                class="mx-auto flex max-w-7xl flex-col gap-6 rounded-3xl border border-orange-500/40 bg-gradient-to-r from-purple-900/40 to-orange-900/40 p-8 glow-mix md:flex-row md:items-center md:justify-between">
+                class="mx-auto grid max-w-7xl gap-5 rounded-3xl border border-orange-500/30 bg-[#080808]/80 p-6 glow-orange lg:grid-cols-[1fr_3fr]">
                 <div>
-                    <h2 class="text-2xl font-black">Ready to host amazing events?</h2>
-                    <p class="mt-2 text-gray-300">
-                        Join thousands of organizers growing their audience with EventOga.
+                    <h2 class="text-3xl font-black">
+                        Powered by <span class="text-orange-500">EventOrbs</span>
+                    </h2>
+                    <p class="mt-3 text-gray-400">
+                        EventOrbs are internal platform credits for publishing, boosts, subscriptions and future wallet
+                        features.
                     </p>
                 </div>
 
-                <div class="flex flex-wrap gap-4">
-                    <button class="rounded-xl border border-white/20 px-8 py-4 font-bold text-white hover:bg-white/10">
-                        Learn More
+                <div class="grid gap-4 sm:grid-cols-4">
+                    <OrbCard amount="1 Orb" value="₦10" />
+                    <OrbCard amount="200 Orbs" value="₦2,000" />
+                    <OrbCard amount="500 Orbs" value="₦5,000" />
+                    <OrbCard amount="1,500 Orbs" value="₦15,000" />
+                </div>
+            </div>
+        </section>
+
+        <!-- TICKET SALES -->
+        <section class="mt-8 w-full px-4 md:px-6 lg:px-8">
+            <div
+                class="mx-auto grid max-w-7xl gap-8 rounded-3xl border border-purple-500/30 bg-[#080808]/80 p-6 glow-purple lg:grid-cols-[1fr_2fr]">
+                <div>
+                    <h2 class="text-3xl font-black">
+                        Ticket sales made simple
+                    </h2>
+                    <p class="mt-3 text-gray-400">
+                        You set the prices. We handle checkout, secure payment and payout.
+                    </p>
+
+                    <button class="mt-6 rounded-xl border border-purple-500/40 px-6 py-3 font-black text-purple-300">
+                        How It Works →
                     </button>
-                    <button
-                        class="rounded-xl bg-orange-500 px-8 py-4 font-black text-white glow-orange hover:bg-orange-600">
-                        Create Your First Event →
+                </div>
+
+                <div class="grid gap-5 md:grid-cols-4">
+                    <ProcessItem icon="users" title="Attendee Buys Ticket" />
+                    <ProcessItem icon="wallet" title="EventOga Processes Payment" />
+                    <ProcessItem icon="percent" title="3% Platform Commission" />
+                    <ProcessItem icon="cash" title="You Get Paid" />
+                </div>
+            </div>
+        </section>
+
+        <!-- TRUST -->
+        <section class="mt-8 w-full px-4 pb-16 md:px-6 lg:px-8">
+            <div class="mx-auto rounded-3xl border border-orange-500/30 bg-[#090909]/80 p-6 glow-mix max-w-7xl">
+                <h2 class="text-3xl font-black">
+                    Built on trust, secured for growth
+                </h2>
+
+                <div class="mt-6 grid gap-4 md:grid-cols-5">
+                    <TrustCard icon="shield" title="Organizer Approval" />
+                    <TrustCard icon="wallet" title="Secure Payments" />
+                    <TrustCard icon="bolt" title="Fraud Protection" />
+                    <TrustCard icon="cash" title="Reliable Payouts" />
+                    <TrustCard icon="users" title="Attendee Trust" />
+                </div>
+            </div>
+
+            <div
+                class="mx-auto mt-8 grid max-w-7xl items-center gap-6 overflow-hidden rounded-3xl border border-purple-500/30 bg-[#080808]/80 p-6 glow-purple lg:grid-cols-[1fr_1fr_auto]">
+                <img src="../assets/partying.png" class="hidden h-40 rounded-2xl object-cover lg:block" />
+
+                <div>
+                    <h2 class="text-4xl font-black">
+                        Ready to Grow <span class="text-orange-500">Your Events?</span>
+                    </h2>
+                    <p class="mt-3 text-gray-400">
+                        Join organizers using EventOga to build unforgettable experiences.
+                    </p>
+                </div>
+
+                <div class="flex flex-col gap-3">
+                    <button class="rounded-xl bg-orange-500 px-7 py-4 font-black text-white glow-orange">
+                        Become an Organizer →
+                    </button>
+                    <button class="rounded-xl border border-purple-500/40 px-7 py-4 font-black text-purple-300">
+                        Talk to Sales →
                     </button>
                 </div>
             </div>
@@ -160,210 +585,135 @@
 </template>
 
 <script setup>
+import { h } from 'vue'
+import organizerBg from '../assets/organizer-bg.png'
 
-import { computed, h, ref } from 'vue'
+const iconClass = 'h-7 w-7 stroke-current'
 
-const computedPlans = computed(() => {
-    return plans.map((plan) => {
-        const monthlyPrice =
-            billing.value === 'yearly'
-                ? plan.monthly * 0.7
-                : plan.monthly
+const Icon = (type) => {
+    const icons = {
+        calendar: [h('rect', { x: 3, y: 5, width: 18, height: 16, rx: 2 }), h('path', { d: 'M16 3v4M8 3v4M3 11h18' })],
+        users: [h('path', { d: 'M17 21v-2a4 4 0 00-3-3.87M7 21v-2a4 4 0 013-3.87' }), h('circle', { cx: 12, cy: 7, r: 4 })],
+        ticket: [h('path', { d: 'M4 7a2 2 0 012-2h12a2 2 0 012 2v3a2 2 0 010 4v3a2 2 0 01-2 2H6a2 2 0 01-2-2v-3a2 2 0 010-4V7z' })],
+        rocket: [h('path', { d: 'M12 15l-3 3m3-3l3 3M12 15c4-2 6-6 7-12-6 1-10 3-12 7l-3 1 4 4 1-3z' })],
+        bolt: [h('path', { d: 'M13 2L4 14h7l-1 8 9-12h-7l1-8z' })],
+        wallet: [h('path', { d: 'M4 7h16v12H4z' }), h('path', { d: 'M16 12h4' })],
+        percent: [h('path', { d: 'M19 5L5 19' }), h('circle', { cx: 7, cy: 7, r: 2 }), h('circle', { cx: 17, cy: 17, r: 2 })],
+        shield: [h('path', { d: 'M12 3l8 4v5c0 5-3.5 9-8 10-4.5-1-8-5-8-10V7l8-4z' }), h('path', { d: 'M9 12l2 2 4-4' })],
+        cash: [h('rect', { x: 3, y: 6, width: 18, height: 12, rx: 2 }), h('circle', { cx: 12, cy: 12, r: 3 })],
+    }
 
-        return {
-            ...plan,
-            displayPrice:
-                plan.name === 'Starter'
-                    ? '₦0'
-                    : plan.name === 'Elite / Agency'
-                        ? '₦50,000+'
-                        : `₦${Math.round(monthlyPrice).toLocaleString()}`,
+    return h('svg', { class: iconClass, fill: 'none', strokeWidth: 2, viewBox: '0 0 24 24' }, icons[type] || icons.ticket)
+}
 
-            period:
-                plan.name === 'Starter'
-                    ? ''
-                    : '/month',
-
-            note:
-                billing.value === 'yearly' && plan.monthly
-                    ? `₦${Math.round(monthlyPrice * 12).toLocaleString()} billed yearly · Save 30%`
-                    : '',
-            cta:
-                plan.trial
-                    ? `Start ${plan.trial}`
-                    : plan.cta,
-        }
-    })
-})
-
-const billing = ref('yearly')
-const iconClass = 'h-8 w-8 stroke-current'
-
-const LightningIcon = () => h('svg', { class: iconClass, fill: 'none', strokeWidth: 2, viewBox: '0 0 24 24' }, [
-    h('path', { d: 'M13 2L4 14h7l-1 8 10-13h-7l1-7z' }),
-])
-
-const ChartIcon = () => h('svg', { class: iconClass, fill: 'none', strokeWidth: 2, viewBox: '0 0 24 24' }, [
-    h('path', { d: 'M4 19V5M4 19h16M8 16v-5M12 16V8M16 16v-9' }),
-])
-
-const ShieldIcon = () => h('svg', { class: iconClass, fill: 'none', strokeWidth: 2, viewBox: '0 0 24 24' }, [
-    h('path', { d: 'M12 3l8 4v5c0 5-3.5 9-8 10-4.5-1-8-5-8-10V7l8-4z' }),
-    h('path', { d: 'M9 12l2 2 4-4' }),
-])
-
-const RocketIcon = () => h('svg', { class: iconClass, fill: 'none', strokeWidth: 2, viewBox: '0 0 24 24' }, [
-    h('path', { d: 'M12 2C8 4 5 8 4 14l6-1 1 6c6-1 10-4 12-8l-6-1-1-6-4-2z' }),
-])
-
-const CrownIcon = () => h('svg', { class: iconClass, fill: 'none', strokeWidth: 2, viewBox: '0 0 24 24' }, [
-    h('path', { d: 'M4 17l2-9 5 5 5-8 2 12H4z' }),
-    h('path', { d: 'M4 20h16' }),
-])
-
-const StarIcon = () => h('svg', { class: iconClass, fill: 'none', strokeWidth: 2, viewBox: '0 0 24 24' }, [
-    h('path', { d: 'M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.2 6.5 20.2l1-6.2L3 9.6l6.2-.9L12 3z' }),
-])
-
-const BriefcaseIcon = () => h('svg', { class: iconClass, fill: 'none', strokeWidth: 2, viewBox: '0 0 24 24' }, [
-    h('rect', { x: 3, y: 7, width: 18, height: 13, rx: 2 }),
-    h('path', { d: 'M9 7V5h6v2M3 12h18' }),
-])
-
-const WalletIcon = () => h('svg', { class: iconClass, fill: 'none', strokeWidth: 2, viewBox: '0 0 24 24' }, [
-    h('path', { d: 'M4 7h16v12H4z' }),
-    h('path', { d: 'M16 12h4' }),
-])
-
-const HeadsetIcon = () => h('svg', { class: iconClass, fill: 'none', strokeWidth: 2, viewBox: '0 0 24 24' }, [
-    h('path', { d: 'M4 13a8 8 0 0116 0v4a2 2 0 01-2 2h-2v-6h4M4 13v4a2 2 0 002 2h2v-6H4' }),
-])
-
-const benefits = [
-    { title: 'More visibility', text: 'Get discovered by the right audience', icon: LightningIcon },
-    { title: 'Powerful analytics', text: 'Track sales and audience insights', icon: ChartIcon },
-    { title: 'Secure & reliable', text: 'Safe payments and trusted platform', icon: ShieldIcon },
-]
-
-const plans = [
-    {
-        name: 'Starter',
-        monthly: 0,
-        yearly: 0,
-        description: 'Perfect for trying out EventOga and hosting small events.',
-        features: [
-            'Up to 3 events per month',
-            'Standard event listing',
-            'Basic event page',
-            'Limited visibility',
-            'No analytics',
-            'Email support',
-        ],
-        cta: 'Get Started Free',
-        color: 'purple',
-        icon: RocketIcon,
+const MiniBadge = {
+    props: ['icon', 'title'],
+    setup(props) {
+        return () => h('div', { class: 'flex items-center gap-3 rounded-xl border border-white/10 bg-black/40 p-4' }, [
+            h('span', { class: 'text-purple-400' }, [Icon(props.icon)]),
+            h('p', { class: 'text-sm font-bold' }, props.title),
+        ])
     },
-    {
-        name: 'Basic',
-        monthly: 5000,
-        yearly: 5000 * 12,
-        description: 'Everything you need to grow your events and audience.',
-        trial: '30-day free trial',
-        features: [
-            'Unlimited events',
-            'Standard event listing',
-            'Basic analytics',
-            'Discount & promo tools',
-            'Email support',
-        ],
-        cta: 'Choose Basic',
-        color: 'orange',
-        icon: CrownIcon,
-    },
-    {
-        name: 'Pro',
-        monthly: 15000,
-        yearly: 15000 * 12,
-        trial: '30-day free trial',
-        description: 'Advanced tools to boost visibility and maximize ticket sales.',
-        features: [
-            'Everything in Basic',
-            'Priority listing',
-            'Featured events',
-            'Advanced analytics',
-            'Audience insights',
-            'Custom branding',
-            'Early access tickets',
-            'Priority support',
-        ],
-        cta: 'Choose Pro',
-        color: 'purple',
-        popular: true,
-        icon: StarIcon,
-    },
-    {
-        name: 'Elite / Agency',
-        monthly: 50000,
-        yearly: 50000 * 12,
-        description: 'For large organizers and agencies.',
-        features: [
-            'Everything in Pro',
-            'Dedicated manager',
-            'Team accounts',
-            'Ad credits included',
-            'Custom integrations',
-        ],
-        cta: 'Contact Sales',
-        color: 'orange',
-        icon: BriefcaseIcon,
-    },
-]
+}
 
-const trustItems = [
-    { title: 'Secure Payments', text: 'Safe & encrypted transactions', color: 'purple', icon: ShieldIcon },
-    { title: '24/7 Support', text: 'We’re here whenever you need us', color: 'orange', icon: HeadsetIcon },
-    { title: 'Easy Payouts', text: 'Get paid quickly & reliably', color: 'purple', icon: WalletIcon },
-    { title: 'Trusted Platform', text: 'Thousands of successful events', color: 'orange', icon: StarIcon },
-]
+const StepCard = {
+    props: ['number', 'title', 'text', 'icon'],
+    setup(props) {
+        return () => h('div', { class: 'rounded-3xl border border-white/10 bg-black/30 p-6' }, [
+            h('span', { class: 'grid h-10 w-10 place-items-center rounded-full bg-purple-500/20 font-black text-purple-300' }, props.number),
+            h('div', { class: 'mt-5 text-orange-500' }, [Icon(props.icon)]),
+            h('h3', { class: 'mt-4 text-xl font-black' }, props.title),
+            h('p', { class: 'mt-3 text-sm leading-6 text-gray-400' }, props.text),
+        ])
+    },
+}
+
+const FlowItem = {
+    props: ['icon', 'title', 'sub'],
+    setup(props) {
+        return () => h('div', { class: 'text-center' }, [
+            h('div', { class: 'mx-auto grid h-16 w-16 place-items-center rounded-full border border-purple-500/40 bg-purple-500/10 text-purple-300' }, [Icon(props.icon)]),
+            h('p', { class: 'mt-3 text-sm font-bold' }, props.title),
+            props.sub ? h('p', { class: 'text-xs text-orange-400' }, props.sub) : null,
+        ])
+    },
+}
+
+const PricingCard = {
+    props: ['name', 'price', 'sub', 'orb', 'features', 'button', 'color', 'badge'],
+    setup(props) {
+        return () =>
+            h('div', { class: `relative rounded-3xl border p-6 ${props.color === 'orange' ? 'border-orange-500/50 glow-orange' : 'border-purple-500/50 glow-purple'}` }, [
+                props.badge ? h('span', { class: 'absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-purple-600 px-5 py-2 text-xs font-black' }, props.badge) : null,
+                h('h3', { class: props.color === 'orange' ? 'font-black text-orange-500' : 'font-black text-purple-400' }, props.name),
+                h('div', { class: 'mt-4 flex items-end gap-1' }, [
+                    h('span', { class: 'text-4xl font-black' }, props.price),
+                    h('span', { class: 'text-gray-400' }, props.sub),
+                ]),
+                h('p', { class: 'mt-2 text-sm font-bold text-orange-400' }, props.orb),
+                h('ul', { class: 'mt-6 space-y-3 text-sm text-gray-300' }, props.features.map(f => h('li', { class: 'flex gap-2' }, [
+                    h('span', { class: props.color === 'orange' ? 'text-orange-500' : 'text-purple-400' }, '✓'),
+                    f,
+                ]))),
+                h('button', { class: props.color === 'orange' ? 'mt-8 w-full rounded-xl bg-orange-500 py-3 font-black text-white' : 'mt-8 w-full rounded-xl border border-purple-500/40 py-3 font-black text-purple-300' }, props.button),
+            ])
+    },
+}
+
+const OrbCard = {
+    props: ['amount', 'value'],
+    setup(props) {
+        return () => h('div', { class: 'rounded-2xl border border-white/10 bg-black/30 p-5 text-center' }, [
+            h('div', { class: 'mx-auto mb-3 grid h-12 w-12 place-items-center rounded-full bg-orange-500/10 text-orange-500' }, '◉'),
+            h('p', { class: 'font-black' }, props.amount),
+            h('p', { class: 'mt-1 text-lg font-black' }, `= ${props.value}`),
+        ])
+    },
+}
+
+const ProcessItem = {
+    props: ['icon', 'title'],
+    setup(props) {
+        return () => h('div', { class: 'text-center' }, [
+            h('div', { class: 'mx-auto grid h-16 w-16 place-items-center rounded-full border border-purple-500/40 bg-purple-500/10 text-purple-300' }, [Icon(props.icon)]),
+            h('p', { class: 'mt-4 text-sm font-black' }, props.title),
+        ])
+    },
+}
+
+const TrustCard = {
+    props: ['icon', 'title'],
+    setup(props) {
+        return () => h('div', { class: 'rounded-2xl border border-white/10 bg-black/30 p-4 text-center' }, [
+            h('div', { class: 'mx-auto mb-3 grid h-12 w-12 place-items-center rounded-full bg-purple-500/10 text-purple-300' }, [Icon(props.icon)]),
+            h('p', { class: 'text-sm font-bold' }, props.title),
+        ])
+    },
+}
 </script>
 
 <style scoped>
 .ambient-bg {
     background:
-        radial-gradient(circle at 10% 20%, rgba(255, 106, 0, 0.15), transparent 24%),
-        radial-gradient(circle at 90% 30%, rgba(168, 85, 247, 0.18), transparent 28%),
-        radial-gradient(circle at 50% 95%, rgba(255, 106, 0, 0.1), transparent 30%),
+        radial-gradient(circle at 12% 8%, rgba(255, 106, 0, 0.16), transparent 25%),
+        radial-gradient(circle at 85% 12%, rgba(168, 85, 247, 0.2), transparent 30%),
+        radial-gradient(circle at 50% 60%, rgba(255, 106, 0, 0.07), transparent 35%),
         #050505;
 }
 
 .glow-orange {
-    box-shadow: 0 0 18px rgba(255, 106, 0, 0.35), 0 0 45px rgba(255, 106, 0, 0.12);
+    box-shadow: 0 0 18px rgba(255, 106, 0, 0.3), 0 0 45px rgba(255, 106, 0, 0.1);
 }
 
 .glow-purple {
-    box-shadow: 0 0 18px rgba(168, 85, 247, 0.35), 0 0 45px rgba(168, 85, 247, 0.14);
+    box-shadow: 0 0 18px rgba(168, 85, 247, 0.3), 0 0 45px rgba(168, 85, 247, 0.12);
+}
+
+.glow-purple-soft {
+    box-shadow: 0 0 14px rgba(168, 85, 247, 0.22);
 }
 
 .glow-mix {
-    box-shadow: 0 0 20px rgba(255, 106, 0, 0.25), 0 0 55px rgba(168, 85, 247, 0.2);
-}
-
-.glow-panel {
-    box-shadow: 0 0 22px rgba(168, 85, 247, 0.12);
-}
-
-.price-fade-enter-active,
-.price-fade-leave-active {
-    transition: all 0.25s ease;
-}
-
-.price-fade-enter-from {
-    opacity: 0;
-    transform: translateY(8px);
-}
-
-.price-fade-leave-to {
-    opacity: 0;
-    transform: translateY(-8px);
+    box-shadow: 0 0 20px rgba(255, 106, 0, 0.22), 0 0 55px rgba(168, 85, 247, 0.18);
 }
 </style>
