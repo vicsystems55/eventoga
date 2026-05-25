@@ -68,6 +68,22 @@ const routes = [
         component: () => import("../pages/dashboard/MyEvents.vue"),
       },
       {
+        path: "all-events",
+        name: "AllEvents",
+        component: () => import("../pages/dashboard/AllEvents.vue"),
+      },
+      {
+        path: "manage-event/:id",
+        name: "ManageEvent",
+        component: () => import("../pages/dashboard/ManageEvent.vue"),
+        props: true,
+      },
+      {
+        path: "create-event",
+        name: "CreateEvent",
+        component: () => import("../pages/dashboard/CreateEvent.vue"),
+      },
+      {
         path: "bookings",
         name: "Bookings",
         component: () => import("../pages/dashboard/Bookings.vue"),

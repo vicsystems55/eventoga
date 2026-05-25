@@ -13,7 +13,7 @@
         </span>
       </button>
 
-      <h1 class="text-2xl font-black">
+      <h1 class="text-2xl font-black"> 
         Event<span class="text-orange-500">Oga</span>
       </h1>
 
@@ -112,6 +112,142 @@
 
       <!-- Content -->
       <main class="min-h-screen flex-1 overflow-hidden">
+
+         <!-- Desktop Header -->
+  <header
+    class="sticky top-0 z-40 hidden items-center justify-between border-b border-white/10 bg-[#050505]/85 px-6 py-4 backdrop-blur-xl lg:flex"
+  >
+    <!-- Search -->
+    <div class="relative w-full max-w-xl">
+      <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">⌕</span>
+      <input
+        type="text"
+        placeholder="Search events, tickets, organizers..."
+        class="w-full rounded-2xl border border-white/10 bg-black/50 py-3 pl-11 pr-4 text-sm text-white outline-none transition focus:border-orange-500"
+      />
+    </div>
+
+    <!-- Right Actions -->
+    <div class="flex items-center gap-4">
+      <!-- Notification -->
+     <div class="relative">
+  <button
+    @click="showNotifications = !showNotifications"
+    class="relative grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-white/5 text-gray-300 transition hover:border-orange-500/40 hover:text-orange-500"
+  >
+    <span
+      v-if="notifications.length"
+      class="absolute right-3 top-3 h-2.5 w-2.5 rounded-full bg-orange-500"
+    ></span>
+
+    🔔
+  </button>
+
+  <!-- Notifications Dropdown -->
+  <Transition name="fade-scale">
+    <div
+      v-if="showNotifications"
+      class="absolute right-0 top-16 z-50 w-[380px] overflow-hidden rounded-3xl border border-white/10 bg-[#0b0b0b]/95 shadow-[0_0_40px_rgba(168,85,247,0.18)] backdrop-blur-xl"
+    >
+      <!-- Header -->
+      <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
+        <div>
+          <h3 class="text-lg font-black text-white">Notifications</h3>
+          <p class="text-xs text-gray-400">
+            {{ notifications.length }} unread updates
+          </p>
+        </div>
+
+        <button
+          class="text-xs font-bold text-orange-500 hover:text-orange-400"
+          @click="markAllRead"
+        >
+          Mark all read
+        </button>
+      </div>
+
+      <!-- Notification List -->
+      <div class="max-h-[420px] overflow-y-auto">
+        <div
+          v-for="notification in notifications"
+          :key="notification.id"
+          class="flex gap-4 border-b border-white/5 px-5 py-4 transition hover:bg-white/5"
+        >
+          <div
+            class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl"
+            :class="notification.iconBg"
+          >
+            {{ notification.icon }}
+          </div>
+
+          <div class="flex-1">
+            <p class="text-sm font-semibold text-white">
+              {{ notification.title }}
+            </p>
+
+            <p class="mt-1 text-xs leading-5 text-gray-400">
+              {{ notification.message }}
+            </p>
+
+            <p class="mt-2 text-[11px] text-gray-500">
+              {{ notification.time }}
+            </p>
+          </div>
+        </div>
+
+        <div
+          v-if="!notifications.length"
+          class="grid place-items-center px-6 py-12 text-center"
+        >
+          <div
+            class="grid h-16 w-16 place-items-center rounded-full bg-white/5 text-2xl"
+          >
+            🔔
+          </div>
+          <p class="mt-4 font-bold text-white">No notifications yet</p>
+          <p class="mt-2 text-sm text-gray-400">
+            Event updates will appear here.
+          </p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="border-t border-white/10 p-4">
+        <button
+          class="w-full rounded-2xl bg-orange-500 px-4 py-3 font-black text-white transition hover:scale-[1.02]"
+        >
+          View All Notifications
+        </button>
+      </div>
+    </div>
+  </Transition>
+</div>
+
+      <!-- Profile -->
+      <button
+        class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 transition hover:border-orange-500/40"
+      >
+        <div
+          class="grid h-10 w-10 place-items-center overflow-hidden rounded-full border border-orange-500/50 bg-orange-500/10 text-sm font-black text-orange-500"
+        >
+          <img
+            v-if="currentUser.avatar"
+            :src="currentUser.avatar"
+            alt="Profile"
+            class="h-full w-full object-cover"
+          />
+          <span v-else>{{ userInitial }}</span>
+        </div>
+
+        <div class="hidden text-left xl:block">
+          <h4 class="text-sm font-black">{{ currentUser.name }}</h4>
+          <p class="text-xs text-gray-400">{{ userRole }}</p>
+        </div>
+
+        <span class="text-gray-500">⌄</span>
+      </button>
+    </div>
+  </header>
         <router-view />
       </main>
     </div>
@@ -121,6 +257,39 @@
 <script setup>
 import { ref, h } from 'vue'
 import { useRoute } from 'vue-router'
+
+const showNotifications = ref(false)
+
+const notifications = ref([
+  {
+    id: 1,
+    title: 'Event Approved',
+    message: 'Your Lagos Afrobeats Night has been approved and is now live.',
+    time: '5 mins ago',
+    icon: '🎉',
+    iconBg: 'bg-green-500/15 text-green-400',
+  },
+  {
+    id: 2,
+    title: 'Ticket Purchase',
+    message: '3 attendees just booked VIP tickets for your event.',
+    time: '20 mins ago',
+    icon: '🎟️',
+    iconBg: 'bg-orange-500/15 text-orange-400',
+  },
+  {
+    id: 3,
+    title: 'Payout Update',
+    message: 'Your payout of ₦48,500 is being processed.',
+    time: '1 hour ago',
+    icon: '💳',
+    iconBg: 'bg-purple-500/15 text-purple-300',
+  },
+])
+
+const markAllRead = () => {
+  notifications.value = []
+}
 
 const route = useRoute()
 const isSidebarOpen = ref(false)
@@ -187,6 +356,7 @@ const SettingsIcon = () =>
 const menuItems = [
   { label: 'Dashboard', path: '/dashboard', icon: DashboardIcon },
   { label: 'My Events', path: '/dashboard/my-events', icon: CalendarIcon },
+  { label: 'All Events', path: '/dashboard/all-events', icon: CalendarIcon },
   { label: 'Create Event', path: '/dashboard/create-event', icon: PlusIcon },
   { label: 'Tickets / Sales', path: '/dashboard/bookings', icon: TicketIcon },
   { label: 'Marketplace', path: '/dashboard/marketplace', icon: StoreIcon },
@@ -195,6 +365,19 @@ const menuItems = [
   { label: 'Messages', path: '/dashboard/messages', icon: MessageIcon },
   { label: 'Settings', path: '/dashboard/settings', icon: SettingsIcon },
 ]
+
+
+const currentUser = JSON.parse(localStorage.getItem('eventoga_user') || '{}')
+
+const userInitial = currentUser?.name
+  ? currentUser.name.charAt(0).toUpperCase()
+  : 'U'
+
+const userRole = currentUser?.roles?.[0]
+  ? currentUser.roles[0].replace('_', ' ')
+  : 'User'
+
+
 </script>
 
 <style scoped>
@@ -208,5 +391,16 @@ const menuItems = [
   box-shadow:
     0 0 20px rgba(255, 106, 0, 0.25),
     0 0 45px rgba(168, 85, 247, 0.18);
+}
+
+.fade-scale-enter-active,
+.fade-scale-leave-active {
+  transition: all 0.2s ease;
+}
+
+.fade-scale-enter-from,
+.fade-scale-leave-to {
+  opacity: 0;
+  transform: scale(0.95) translateY(-8px);
 }
 </style>

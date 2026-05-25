@@ -10,11 +10,13 @@
       </div>
 
       <div class="flex flex-wrap gap-3">
-        <button class="rounded-xl bg-orange-500 px-6 py-3 font-black text-white glow-orange transition hover:bg-orange-600">
+        <button @click="goToCreate" type="button"
+          class="rounded-xl bg-orange-500 px-6 py-3 font-black text-white glow-orange transition hover:bg-orange-600">
           ＋ Create Event
         </button>
 
-        <button class="rounded-xl border border-purple-500/40 px-6 py-3 font-bold text-purple-300 glow-purple-soft transition hover:bg-purple-500/10">
+        <button
+          class="rounded-xl border border-purple-500/40 px-6 py-3 font-bold text-purple-300 glow-purple-soft transition hover:bg-purple-500/10">
           ◰ View Analytics
         </button>
       </div>
@@ -22,18 +24,12 @@
 
     <!-- Stats -->
     <div class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <div
-        v-for="stat in stats"
-        :key="stat.label"
-        class="rounded-2xl border p-5"
-        :class="stat.color === 'orange' ? 'border-orange-500/40 glow-orange-card' : 'border-purple-500/40 glow-purple-card'"
-      >
+      <div v-for="stat in stats" :key="stat.label" class="rounded-2xl border p-5"
+        :class="stat.color === 'orange' ? 'border-orange-500/40 glow-orange-card' : 'border-purple-500/40 glow-purple-card'">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-4">
-            <div
-              class="grid h-14 w-14 place-items-center rounded-2xl"
-              :class="stat.color === 'orange' ? 'bg-orange-500/15 text-orange-500' : 'bg-purple-500/15 text-purple-400'"
-            >
+            <div class="grid h-14 w-14 place-items-center rounded-2xl"
+              :class="stat.color === 'orange' ? 'bg-orange-500/15 text-orange-500' : 'bg-purple-500/15 text-purple-400'">
               <component :is="stat.icon" />
             </div>
 
@@ -44,13 +40,8 @@
             </div>
           </div>
 
-          <svg
-            class="h-12 w-16 opacity-80"
-            :class="stat.color === 'orange' ? 'stroke-orange-500' : 'stroke-purple-500'"
-            fill="none"
-            stroke-width="2"
-            viewBox="0 0 80 40"
-          >
+          <svg class="h-12 w-16 opacity-80" :class="stat.color === 'orange' ? 'stroke-orange-500' : 'stroke-purple-500'"
+            fill="none" stroke-width="2" viewBox="0 0 80 40">
             <path d="M2 34 C12 30, 18 18, 28 22 S42 36, 52 18 S64 12, 72 22 S78 18, 80 10" />
           </svg>
         </div>
@@ -62,12 +53,8 @@
       <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
         <div class="relative w-full xl:max-w-sm">
           <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">⌕</span>
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search events..."
-            class="w-full rounded-xl border border-white/10 bg-black/50 py-3 pl-11 pr-4 text-sm outline-none transition focus:border-orange-500"
-          />
+          <input v-model="searchQuery" type="text" placeholder="Search events..."
+            class="w-full rounded-xl border border-white/10 bg-black/50 py-3 pl-11 pr-4 text-sm outline-none transition focus:border-orange-500" />
         </div>
 
         <div class="grid gap-3 sm:grid-cols-3 xl:flex">
@@ -98,24 +85,16 @@
 
     <!-- Events Grid -->
     <div class="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-      <div
-        v-for="event in filteredEvents"
-        :key="event.title"
-        class="group overflow-hidden rounded-2xl border border-white/10 bg-[#0b0b0b] transition hover:-translate-y-2 hover:border-orange-500/50 hover:shadow-[0_0_35px_rgba(255,106,0,0.25)]"
-      >
+      <div v-for="event in filteredEvents" :key="event.title"
+        class="group overflow-hidden rounded-2xl border border-white/10 bg-[#0b0b0b] transition hover:-translate-y-2 hover:border-orange-500/50 hover:shadow-[0_0_35px_rgba(255,106,0,0.25)]">
         <div class="relative h-44 overflow-hidden">
-          <img
-            :src="event.image"
-            :alt="event.title"
-            class="h-full w-full object-cover transition duration-700 group-hover:scale-110"
-          />
+          <img :src="event.banner ? `${apiBaseUrl}/storage/${event.banner}` : bg1" :alt="event.title"
+            class="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
 
           <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
 
-          <span
-            class="absolute left-3 top-3 rounded-full px-3 py-1 text-xs font-bold"
-            :class="statusClass(event.status)"
-          >
+          <span class="absolute left-3 top-3 rounded-full px-3 py-1 text-xs font-bold"
+            :class="statusClass(event.status)">
             {{ event.status }}
           </span>
 
@@ -129,13 +108,13 @@
             {{ event.title }}
           </h3>
 
-          <p class="mt-2 text-xs text-gray-400">📅 {{ event.date }}</p>
-          <p class="mt-1 text-xs text-gray-400">📍 {{ event.location }}</p>
+          <p class="mt-2 text-xs text-gray-400">📅 {{ formatDate(event.starts_at) }}</p>
+          <p class="mt-1 text-xs text-gray-400">📍 {{ eventLocation(event) }}</p>
 
           <div class="mt-4 border-t border-white/10 pt-4">
             <div class="grid grid-cols-3 items-center gap-3">
               <div>
-                <p class="font-black">{{ event.sold }}</p>
+                <p class="font-black">{{ event.tickets_sold_count || 0 }}</p>
                 <p class="text-xs text-gray-500">Tickets Sold</p>
               </div>
 
@@ -151,7 +130,8 @@
               </div>
             </div>
 
-            <button class="mt-4 flex w-full items-center justify-between rounded-xl border border-white/10 px-4 py-3 text-sm font-bold transition hover:border-orange-500 hover:text-orange-500">
+            <button
+              class="mt-4 flex w-full items-center justify-between rounded-xl border border-white/10 px-4 py-3 text-sm font-bold transition hover:border-orange-500 hover:text-orange-500">
               Manage Event <span>→</span>
             </button>
           </div>
@@ -173,8 +153,18 @@
 </template>
 
 <script setup>
-import { computed, h, ref } from 'vue'
-import bg1 from '../../assets/bg1.png'
+import { computed, h, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { eventService } from '@/services/eventService'
+import bg1 from '@/assets/bg1.png'
+
+const router = useRouter()
+
+const apiBaseUrl = import.meta.env.VITE_API_ROOT_URL || 'http://localhost:6969'
+
+const events = ref([])
+const isLoading = ref(false)
+const errorMessage = ref('')
 
 const searchQuery = ref('')
 const statusFilter = ref('all')
@@ -183,135 +173,139 @@ const sortBy = ref('newest')
 
 const iconClass = 'h-6 w-6 stroke-current'
 
+const makeIcon = (children) =>
+  h('svg', { class: iconClass, fill: 'none', strokeWidth: 2, viewBox: '0 0 24 24' }, children)
+
 const CalendarIcon = () =>
-  h('svg', { class: iconClass, fill: 'none', strokeWidth: 2, viewBox: '0 0 24 24' }, [
+  makeIcon([
     h('rect', { x: 3, y: 5, width: 18, height: 16, rx: 2 }),
     h('path', { d: 'M16 3v4M8 3v4M3 11h18' }),
   ])
 
 const TicketIcon = () =>
-  h('svg', { class: iconClass, fill: 'none', strokeWidth: 2, viewBox: '0 0 24 24' }, [
-    h('path', { d: 'M4 7a2 2 0 012-2h12a2 2 0 012 2v3a2 2 0 010 4v3a2 2 0 01-2 2H6a2 2 0 01-2-2v-3a2 2 0 010-4V7z' }),
+  makeIcon([
+    h('path', {
+      d: 'M4 7a2 2 0 012-2h12a2 2 0 012 2v3a2 2 0 010 4v3a2 2 0 01-2 2H6a2 2 0 01-2-2v-3a2 2 0 010-4V7z',
+    }),
   ])
 
 const WalletIcon = () =>
-  h('svg', { class: iconClass, fill: 'none', strokeWidth: 2, viewBox: '0 0 24 24' }, [
+  makeIcon([
     h('path', { d: 'M4 7h16v12H4z' }),
     h('path', { d: 'M16 12h4' }),
   ])
 
 const UsersIcon = () =>
-  h('svg', { class: iconClass, fill: 'none', strokeWidth: 2, viewBox: '0 0 24 24' }, [
+  makeIcon([
     h('path', { d: 'M17 21v-2a4 4 0 00-3-3.87M7 21v-2a4 4 0 013-3.87' }),
     h('circle', { cx: 12, cy: 7, r: 4 }),
   ])
 
-const stats = [
-  { label: 'Total Events', value: '24', change: '↑ 12% from last month', color: 'orange', icon: CalendarIcon },
-  { label: 'Upcoming', value: '10', change: '↑ 8% from last month', color: 'purple', icon: TicketIcon },
-  { label: 'Live Now', value: '2', change: '— No change', color: 'orange', icon: WalletIcon },
-  { label: 'Completed', value: '12', change: '↑ 20% from last month', color: 'purple', icon: UsersIcon },
-]
+const eventLocation = (event) => {
+  if (event.event_format === 'online') {
+    return event.online_platform || 'Online'
+  }
 
-const events = [
-  {
-    title: 'Afrobeats Live Concert',
-    category: 'Concert',
-    status: 'Live',
-    date: 'May 24, 2025 · 7:00 PM',
-    location: 'Eko Convention Centre, Lagos',
-    sold: '342/500',
-    percent: '68%',
-    revenue: '₦1.2M',
-    image: bg1,
-  },
-  {
-    title: 'Tech Summit 2025',
-    category: 'Seminar',
-    status: 'Upcoming',
-    date: 'May 30, 2025 · 9:00 AM',
-    location: 'Landmark Centre, Lagos',
-    sold: '128/300',
-    percent: '43%',
-    revenue: '₦850K',
-    image: bg1,
-  },
-  {
-    title: 'Beach Party Vibes',
-    category: 'Party',
-    status: 'Upcoming',
-    date: 'Jun 7, 2025 · 4:00 PM',
-    location: 'Elegushi Beach, Lagos',
-    sold: '89/200',
-    percent: '45%',
-    revenue: '₦450K',
-    image: bg1,
-  },
-  {
-    title: 'Food & Drink Festival',
-    category: 'Food',
-    status: 'Completed',
-    date: 'Apr 12, 2025 · 12:00 PM',
-    location: 'Muri Okunola Park, Lagos',
-    sold: '512/600',
-    percent: '85%',
-    revenue: '₦1.8M',
-    image: bg1,
-  },
-  {
-    title: 'Comedy Night Live',
-    category: 'Concert',
-    status: 'Completed',
-    date: 'Mar 28, 2025 · 8:00 PM',
-    location: 'Terra Kulture, Lagos',
-    sold: '245/300',
-    percent: '81%',
-    revenue: '₦720K',
-    image: bg1,
-  },
-  {
-    title: 'Art & Culture Exhibition',
-    category: 'Seminar',
-    status: 'Cancelled',
-    date: 'Apr 5, 2025 · 10:00 AM',
-    location: 'Nike Art Gallery, Lagos',
-    sold: '0/150',
-    percent: '0%',
-    revenue: '₦0',
-    image: bg1,
-  },
-  {
-    title: 'Lagos Music Festival',
-    category: 'Concert',
-    status: 'Upcoming',
-    date: 'Jun 21, 2025 · 2:00 PM',
-    location: 'TBS, Lagos',
-    sold: '210/800',
-    percent: '26%',
-    revenue: '₦1.1M',
-    image: bg1,
-  },
-  {
-    title: 'Startup Pitch Night',
-    category: 'Seminar',
-    status: 'Completed',
-    date: 'Feb 18, 2025 · 5:00 PM',
-    location: 'Civic Centre, Lagos',
-    sold: '120/150',
-    percent: '80%',
-    revenue: '₦360K',
-    image: bg1,
-  },
-]
+  return [event.venue_name, event.city, event.state].filter(Boolean).join(', ') || 'Location not set'
+}
+
+const formatDate = (date) => {
+  if (!date) return 'Date not set'
+
+  return new Date(date).toLocaleString('en-NG', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  })
+}
+
+const imageUrl = (path) => {
+  if (!path) return bg1
+  if (path.startsWith('http')) return path
+
+  return `${apiBaseUrl}/storage/${path}`
+}
+
+const ticketTotal = (event) => {
+  const tickets = event.ticket_types || event.ticketTypes || []
+
+  return tickets.reduce((sum, ticket) => sum + Number(ticket.quantity || 0), 0)
+}
+
+const ticketPercent = (event) => {
+  const total = ticketTotal(event)
+  const sold = Number(event.tickets_sold_count || 0)
+
+  if (!total) return 0
+
+  return Math.round((sold / total) * 100)
+}
+
+const readableStatus = (status) => {
+  const map = {
+    draft: 'Draft',
+    pending_approval: 'Pending Approval',
+    waiting_list: 'Waiting List',
+    published: 'Published',
+    completed: 'Completed',
+    cancelled: 'Cancelled',
+    expired: 'Expired',
+    rejected: 'Rejected',
+    suspended: 'Suspended',
+  }
+
+  return map[status] || status
+}
+
+const statusClass = (status) => {
+  const classes = {
+    published: 'bg-green-500/20 text-green-400',
+    waiting_list: 'bg-purple-500/20 text-purple-300',
+    pending_approval: 'bg-yellow-500/20 text-yellow-300',
+    completed: 'bg-gray-500/20 text-gray-300',
+    cancelled: 'bg-red-500/20 text-red-400',
+    rejected: 'bg-red-500/20 text-red-400',
+    suspended: 'bg-red-500/20 text-red-400',
+    expired: 'bg-gray-500/20 text-gray-300',
+    draft: 'bg-orange-500/20 text-orange-400',
+  }
+
+  return classes[status] || 'bg-orange-500/20 text-orange-400'
+}
+
+const stats = computed(() => {
+  const total = events.value.length
+  const upcoming = events.value.filter((event) =>
+    ['waiting_list', 'pending_approval', 'published'].includes(event.status)
+  ).length
+  const live = events.value.filter((event) => event.status === 'published').length
+  const completed = events.value.filter((event) => event.status === 'completed').length
+
+  return [
+    { label: 'Total Events', value: total, change: 'Your created events', color: 'orange', icon: CalendarIcon },
+    { label: 'Upcoming', value: upcoming, change: 'Waiting or approved', color: 'purple', icon: TicketIcon },
+    { label: 'Published', value: live, change: 'Visible to attendees', color: 'orange', icon: WalletIcon },
+    { label: 'Completed', value: completed, change: 'Past events', color: 'purple', icon: UsersIcon },
+  ]
+})
+
+const categories = computed(() => {
+  const names = events.value
+    .map((event) => event.category?.name)
+    .filter(Boolean)
+
+  return [...new Set(names)]
+})
 
 const filteredEvents = computed(() => {
-  let result = [...events]
+  let result = [...events.value]
 
-  if (searchQuery.value) {
+  if (searchQuery.value.trim()) {
     const query = searchQuery.value.toLowerCase()
+
     result = result.filter((event) =>
-      event.title.toLowerCase().includes(query) ||
-      event.location.toLowerCase().includes(query)
+      event.title?.toLowerCase().includes(query) ||
+      eventLocation(event).toLowerCase().includes(query) ||
+      event.category?.name?.toLowerCase().includes(query)
     )
   }
 
@@ -320,19 +314,52 @@ const filteredEvents = computed(() => {
   }
 
   if (categoryFilter.value !== 'all') {
-    result = result.filter((event) => event.category === categoryFilter.value)
+    result = result.filter((event) => event.category?.name === categoryFilter.value)
+  }
+
+  if (sortBy.value === 'tickets') {
+    result.sort((a, b) => Number(b.tickets_sold_count || 0) - Number(a.tickets_sold_count || 0))
+  }
+
+  if (sortBy.value === 'newest') {
+    result.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
   }
 
   return result
 })
 
-const statusClass = (status) => {
-  if (status === 'Live') return 'bg-green-500/20 text-green-400'
-  if (status === 'Upcoming') return 'bg-purple-500/20 text-purple-300'
-  if (status === 'Completed') return 'bg-gray-500/20 text-gray-300'
-  if (status === 'Cancelled') return 'bg-red-500/20 text-red-400'
-  return 'bg-orange-500/20 text-orange-400'
+const fetchEvents = async () => {
+  try {
+    isLoading.value = true
+    errorMessage.value = ''
+
+    console.log('Fetching my events...')
+
+    const response = await eventService.getMyEvents()
+
+    console.log('My events response:', response)
+
+    events.value = response.data || []
+  } catch (error) {
+    console.error('My events error:', error.response || error)
+
+    errorMessage.value =
+      error.response?.data?.message ||
+      error.message ||
+      'Unable to fetch events'
+  } finally {
+    isLoading.value = false
+  }
 }
+
+const goToCreate = () => {
+  router.push({ name: 'CreateEvent' })
+}
+
+onMounted(() => {
+  console.log('MyEvents mounted')
+  fetchEvents()
+})
 </script>
 
 <style scoped>
