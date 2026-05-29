@@ -410,7 +410,7 @@ const differenceItems = [
 
 const teamMembers = [
   {
-    name: 'Kelvin',
+    name: 'Kelvin Obieze',
     role: 'CEO & Co-founder',
     image: kelvin,
   },
