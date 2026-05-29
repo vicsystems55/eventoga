@@ -17,9 +17,29 @@
         Event<span class="text-orange-500">Oga</span>
       </h1>
 
-      <button class="grid h-11 w-11 place-items-center rounded-xl bg-orange-500 font-black text-black">
-        K
-      </button>
+      <div ref="mobileProfileRef" class="relative">
+        <button
+          @click.stop="showProfileMenu = !showProfileMenu"
+          class="grid h-11 w-11 place-items-center rounded-xl bg-orange-500 font-black text-black"
+        >
+          <span v-if="currentUser.avatar" class="h-9 w-9 block overflow-hidden rounded-full">
+            <img :src="currentUser.avatar" alt="avatar" class="h-full w-full object-cover" />
+          </span>
+          <span v-else>{{ userInitial }}</span>
+        </button>
+
+        <Transition name="fade-scale">
+          <div
+            v-if="showProfileMenu"
+            class="fixed right-4 top-16 z-50 w-48 rounded-2xl border border-white/10 bg-[#0b0b0b]/95 p-2 shadow-lg lg:hidden"
+          >
+            <button @click="goToWallet" class="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-white/5">My Wallet</button>
+            <button @click="goToProfile" class="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-white/5">Profile</button>
+            <div class="border-t border-white/5 my-1"></div>
+            <button @click="logout" class="w-full text-left rounded-xl px-3 py-2 text-sm text-red-400 hover:bg-white/5">Logout</button>
+          </div>
+        </Transition>
+      </div>
     </nav>
 
     <div class="flex">
@@ -276,6 +296,7 @@ import { useRoute, useRouter } from 'vue-router'
 const showNotifications = ref(false)
 const showProfileMenu = ref(false)
 const profileRef = ref(null)
+const mobileProfileRef = ref(null)
 
 const router = useRouter()
 
@@ -424,7 +445,9 @@ const logout = () => {
 // close profile menu when clicking outside
 onMounted(() => {
   const onDocClick = (e) => {
-    if (profileRef.value && !profileRef.value.contains(e.target)) {
+    const clickedInsideDesktop = profileRef.value && profileRef.value.contains(e.target)
+    const clickedInsideMobile = mobileProfileRef.value && mobileProfileRef.value.contains(e.target)
+    if (!clickedInsideDesktop && !clickedInsideMobile) {
       showProfileMenu.value = false
     }
   }
