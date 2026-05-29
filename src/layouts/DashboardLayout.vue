@@ -33,7 +33,7 @@
       <!-- Sidebar -->
       <aside
         :class="isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
-        class="fixed left-0 top-0 z-50 flex h-screen w-72 flex-col border-r border-white/10 bg-[#060606]/95 p-5 backdrop-blur-xl transition-transform duration-300 lg:sticky lg:z-10"
+        class="fixed left-0 top-0 z-50 flex h-screen w-72 flex-col border-r border-white/10 bg-[#060606]/95 p-5 backdrop-blur-xl transition-transform duration-300 lg:sticky lg:z-10 overflow-y-auto sidebar"
       >
         <!-- Logo -->
         <div class="flex items-center justify-between">
@@ -111,7 +111,7 @@
       </aside>
 
       <!-- Content -->
-      <main class="min-h-screen flex-1 overflow-hidden">
+      <main class="min-h-screen flex-1 overflow-auto bg-[#050505]">
 
          <!-- Desktop Header -->
   <header
@@ -224,28 +224,43 @@
 </div>
 
       <!-- Profile -->
-      <button
-        class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 transition hover:border-orange-500/40"
-      >
-        <div
-          class="grid h-10 w-10 place-items-center overflow-hidden rounded-full border border-orange-500/50 bg-orange-500/10 text-sm font-black text-orange-500"
+      <div ref="profileRef" class="relative">
+        <button
+          @click.stop="showProfileMenu = !showProfileMenu"
+          class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 transition hover:border-orange-500/40"
         >
-          <img
-            v-if="currentUser.avatar"
-            :src="currentUser.avatar"
-            alt="Profile"
-            class="h-full w-full object-cover"
-          />
-          <span v-else>{{ userInitial }}</span>
-        </div>
+          <div
+            class="grid h-10 w-10 place-items-center overflow-hidden rounded-full border border-orange-500/50 bg-orange-500/10 text-sm font-black text-orange-500"
+          >
+            <img
+              v-if="currentUser.avatar"
+              :src="currentUser.avatar"
+              alt="Profile"
+              class="h-full w-full object-cover"
+            />
+            <span v-else>{{ userInitial }}</span>
+          </div>
 
-        <div class="hidden text-left xl:block">
-          <h4 class="text-sm font-black">{{ currentUser.name }}</h4>
-          <p class="text-xs text-gray-400">{{ userRole }}</p>
-        </div>
+          <div class="hidden text-left xl:block">
+            <h4 class="text-sm font-black">{{ currentUser.name }}</h4>
+            <p class="text-xs text-gray-400">{{ userRole }}</p>
+          </div>
 
-        <span class="text-gray-500">⌄</span>
-      </button>
+          <span class="text-gray-500">⌄</span>
+        </button>
+
+        <Transition name="fade-scale">
+          <div
+            v-if="showProfileMenu"
+            class="absolute right-0 mt-3 w-48 rounded-2xl border border-white/10 bg-[#0b0b0b]/95 z-50 p-2 shadow-lg"
+          >
+            <button @click="goToWallet" class="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-white/5">My Wallet</button>
+            <button @click="goToProfile" class="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-white/5">Profile</button>
+            <div class="border-t border-white/5 my-1"></div>
+            <button @click="logout" class="w-full text-left rounded-xl px-3 py-2 text-sm text-red-400 hover:bg-white/5">Logout</button>
+          </div>
+        </Transition>
+      </div>
     </div>
   </header>
         <router-view />
@@ -255,10 +270,14 @@
 </template>
 
 <script setup>
-import { ref, h } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, h, onMounted, onUnmounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const showNotifications = ref(false)
+const showProfileMenu = ref(false)
+const profileRef = ref(null)
+
+const router = useRouter()
 
 const notifications = ref([
   {
@@ -362,6 +381,8 @@ const menuItems = [
   { label: 'Marketplace', path: '/dashboard/marketplace', icon: StoreIcon },
   { label: 'Analytics', path: '/dashboard/analytics', icon: ChartIcon },
   { label: 'Accounts', path: '/dashboard/accounts', icon: ChartIcon },
+  { label: 'Profile', path: '/dashboard/profile', icon: SettingsIcon },
+  { label: 'Attendee Onboarding', path: '/dashboard/attendee-onboarding', icon: SettingsIcon },
   { label: 'Messages', path: '/dashboard/messages', icon: MessageIcon },
   { label: 'Settings', path: '/dashboard/settings', icon: SettingsIcon },
 ]
@@ -376,6 +397,40 @@ const userInitial = currentUser?.name
 const userRole = currentUser?.roles?.[0]
   ? currentUser.roles[0].replace('_', ' ')
   : 'User'
+
+const goToProfile = () => {
+  showProfileMenu.value = false
+  router.push('/dashboard/profile')
+}
+
+const goToWallet = () => {
+  showProfileMenu.value = false
+  router.push('/dashboard/wallet')
+}
+
+const logout = () => {
+  // clear user data and token then redirect to auth
+  try {
+    localStorage.removeItem('eventoga_user')
+    localStorage.removeItem('eventoga_token')
+    localStorage.removeItem('role')
+  } catch (e) {
+    // ignore
+  }
+  showProfileMenu.value = false
+  router.push('/auth')
+}
+
+// close profile menu when clicking outside
+onMounted(() => {
+  const onDocClick = (e) => {
+    if (profileRef.value && !profileRef.value.contains(e.target)) {
+      showProfileMenu.value = false
+    }
+  }
+  document.addEventListener('click', onDocClick)
+  onUnmounted(() => document.removeEventListener('click', onDocClick))
+})
 
 
 </script>
@@ -402,5 +457,42 @@ const userRole = currentUser?.roles?.[0]
 .fade-scale-leave-to {
   opacity: 0;
   transform: scale(0.95) translateY(-8px);
+}
+
+/* Themed custom scrollbar for the dashboard sidebar and main content */
+.sidebar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(255,106,0,0.6) transparent;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(255,106,0,0.75), rgba(168,85,247,0.75));
+  border-radius: 9999px;
+  border: 2px solid rgba(6,6,6,0.6);
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  filter: brightness(1.05);
+}
+
+main::-webkit-scrollbar {
+  height: 8px;
+}
+
+main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+main::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, rgba(255,106,0,0.35), rgba(168,85,247,0.35));
+  border-radius: 9999px;
 }
 </style>

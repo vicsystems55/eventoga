@@ -50,6 +50,15 @@ const routes = [
         name: "About",
         component: () => import("../pages/aboutPage.vue"),
       },
+      {
+        path: "trivia",
+        name: "Trivia",
+        component: () => import("../pages/EventOgaTrivia.vue"),
+        meta: {
+          title: "EventOga Trivia",
+          description: "Play trivia games and win rewards on EventOga",
+        },
+      },
     ],
   },
   {
@@ -71,6 +80,16 @@ const routes = [
         path: "all-events",
         name: "AllEvents",
         component: () => import("../pages/dashboard/AllEvents.vue"),
+      },
+      {
+        path: "organizer-onboarding",
+        name: "OrganizerOnboarding",
+        component: () => import("../pages/dashboard/OrganizerOnboarding.vue"),
+      },
+            {
+        path: "attendee-onboarding",
+        name: "AttendeeOnboarding",
+        component: () => import("../pages/AttendeeOnboarding.vue"),
       },
       {
         path: "manage-event/:id",
