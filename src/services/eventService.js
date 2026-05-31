@@ -25,6 +25,11 @@ export const eventService = {
     return data.data;
   },
 
+  async getEvent(id) {
+    const { data } = await api.get(`/events/${id}`, { skipAuth: true });
+    return data.data;
+  },
+
   async getAdminEvents(params = {}) {
     const { data } = await api.get("/admin/events", { params });
     return data.data;

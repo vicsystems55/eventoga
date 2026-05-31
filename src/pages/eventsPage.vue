@@ -237,6 +237,7 @@
                     </div>
 
                     <button
+                      @click.stop="goToEvent(event)"
                       class="rounded-lg bg-orange-500 px-4 py-2 text-sm font-bold transition hover:bg-orange-600"
                     >
                       Book Now
@@ -427,7 +428,7 @@
                       </span>
                     </div>
 
-                    <button class="w-full rounded-xl bg-orange-500 py-3 font-black transition hover:bg-orange-600">
+                    <button @click="goToEvent(selectedEvent)" class="w-full rounded-xl bg-orange-500 py-3 font-black transition hover:bg-orange-600">
                       Book Now
                     </button>
                   </div>
@@ -458,6 +459,7 @@ import AOS from 'aos'
 import 'aos/dist/aos.css'
 
 import { ref, computed, onMounted, nextTick, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { eventService } from '@/services/eventService'
 import { categoryService } from '@/services/categoryService'
 import bg1 from '@/assets/bg1.png'
@@ -476,6 +478,7 @@ const itemsPerPage = 9
 
 const selectedEvent = ref(null)
 const ticketQuantity = ref(1)
+const router = useRouter()
 
 const allEvents = ref([])
 const categories = ref([])
@@ -681,6 +684,12 @@ const viewEventDetails = (event) => {
   selectedEvent.value = event
   ticketQuantity.value = 1
   document.body.style.overflow = 'hidden'
+}
+
+const goToEvent = (event) => {
+  if (!event) return
+  closeModal()
+  router.push({ name: 'EventDetails', params: { id: event.id } })
 }
 
 const closeModal = () => {

@@ -52,18 +52,53 @@
         <button class="rounded-xl border border-white/30 px-5 py-3 text-sm font-bold hover:border-orange-500 transition">
           📍 Lagos⌄
         </button>
-        <router-link
-          to="/auth"
-          class="rounded-xl border border-white/30 px-6 py-3 text-sm font-bold hover:border-orange-500 transition"
-        >
-          Login
-        </router-link>
-        <router-link
-          to="/auth?tab=register"
-          class="rounded-xl bg-orange-500 px-6 py-3 text-sm font-black text-white hover:bg-orange-600 transition"
-        >
-          Sign Up
-        </router-link>
+
+        <template v-if="isLoggedIn">
+          <div ref="profileRef" class="relative">
+            <button
+              @click.stop="showProfileMenu = !showProfileMenu"
+              class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 transition hover:border-orange-500/40"
+            >
+              <div class="grid h-10 w-10 place-items-center overflow-hidden rounded-full border border-orange-500/50 bg-orange-500/10 text-sm font-black text-orange-500">
+                <img v-if="currentUser.avatar" :src="currentUser.avatar" alt="Profile" class="h-full w-full object-cover" />
+                <span v-else>{{ userInitial }}</span>
+              </div>
+
+              <div class="hidden text-left xl:block">
+                <h4 class="text-sm font-black">{{ currentUser.name }}</h4>
+              </div>
+
+              <span class="text-gray-500">⌄</span>
+            </button>
+
+            <Transition name="fade-scale">
+              <div
+                v-if="showProfileMenu"
+                class="absolute right-0 mt-3 w-48 rounded-2xl border border-white/10 bg-[#0b0b0b]/95 z-50 p-2 shadow-lg"
+              >
+                <button @click="goToWallet" class="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-white/5">My Wallet</button>
+                <button @click="goToProfile" class="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-white/5">Profile</button>
+                <div class="border-t border-white/5 my-1"></div>
+                <button @click="logout" class="w-full text-left rounded-xl px-3 py-2 text-sm text-red-400 hover:bg-white/5">Logout</button>
+              </div>
+            </Transition>
+          </div>
+        </template>
+
+        <template v-else>
+          <router-link
+            to="/auth"
+            class="rounded-xl border border-white/30 px-6 py-3 text-sm font-bold hover:border-orange-500 transition"
+          >
+            Login
+          </router-link>
+          <router-link
+            to="/auth?tab=register"
+            class="rounded-xl bg-orange-500 px-6 py-3 text-sm font-black text-white hover:bg-orange-600 transition"
+          >
+            Sign Up
+          </router-link>
+        </template>
       </div>
 
       <!-- Mobile Menu Button -->
@@ -138,20 +173,28 @@
                 About Us
               </router-link>
               <hr class="my-4 border-white/10" />
-              <router-link
-                to="/auth"
-                @click="isMenuOpen = false"
-                class="block rounded-xl border border-white/30 px-4 py-3 text-center text-sm font-bold"
-              >
-                Login
-              </router-link>
-              <router-link
-                to="/auth?tab=register"
-                @click="isMenuOpen = false"
-                class="block rounded-xl bg-orange-500 px-4 py-3 text-center text-sm font-black text-black"
-              >
-                Sign Up
-              </router-link>
+              <template v-if="isLoggedIn">
+                <button @click="() => { isMenuOpen = false; goToWallet() }" class="block w-full rounded-xl px-4 py-3 text-left text-sm font-bold">My Wallet</button>
+                <button @click="() => { isMenuOpen = false; goToProfile() }" class="block w-full rounded-xl px-4 py-3 text-left text-sm font-bold">Profile</button>
+                <div class="border-t border-white/10 my-2"></div>
+                <button @click="() => { isMenuOpen = false; logout() }" class="block w-full rounded-xl px-4 py-3 text-left text-sm text-red-400">Logout</button>
+              </template>
+              <template v-else>
+                <router-link
+                  to="/auth"
+                  @click="isMenuOpen = false"
+                  class="block rounded-xl border border-white/30 px-4 py-3 text-center text-sm font-bold"
+                >
+                  Login
+                </router-link>
+                <router-link
+                  to="/auth?tab=register"
+                  @click="isMenuOpen = false"
+                  class="block rounded-xl bg-orange-500 px-4 py-3 text-center text-sm font-black text-black"
+                >
+                  Sign Up
+                </router-link>
+              </template>
             </div>
           </div>
         </Transition>
@@ -233,11 +276,56 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 const isMenuOpen = ref(false)
+
+// auth / profile state
+const showProfileMenu = ref(false)
+const profileRef = ref(null)
+
+const currentUser = JSON.parse(localStorage.getItem('eventoga_user') || '{}')
+
+const userInitial = currentUser?.name
+  ? currentUser.name.charAt(0).toUpperCase()
+  : 'U'
+
+const isLoggedIn = !!localStorage.getItem('eventoga_user') && Object.keys(currentUser).length > 0
+
+const goToProfile = () => {
+  showProfileMenu.value = false
+  router.push('/dashboard/profile')
+}
+
+const goToWallet = () => {
+  showProfileMenu.value = false
+  router.push('/dashboard/wallet')
+}
+
+const logout = () => {
+  try {
+    localStorage.removeItem('eventoga_user')
+    localStorage.removeItem('eventoga_token')
+    localStorage.removeItem('role')
+  } catch (e) {
+    // ignore
+  }
+  showProfileMenu.value = false
+  router.push('/auth')
+}
+
+// close profile menu when clicking outside
+onMounted(() => {
+  const onDocClick = (e) => {
+    const clickedInside = profileRef.value && profileRef.value.contains(e.target)
+    if (!clickedInside) showProfileMenu.value = false
+  }
+  document.addEventListener('click', onDocClick)
+  onUnmounted(() => document.removeEventListener('click', onDocClick))
+})
 
 const isActive = (path) => {
   if (path === '/') {
