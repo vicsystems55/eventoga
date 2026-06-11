@@ -31,6 +31,15 @@ const routes = [
         component: () => import("../pages/eventsPage.vue"),
       },
       {
+        path: "world-events",
+        name: "WorldEvents",
+        component: () => import("../pages/WorldEvents.vue"),
+        meta: {
+          title: "World Events | EventOga",
+          description: "Discover major events happening worldwide.",
+        },
+      },
+      {
         path: "events/:id",
         name: "EventDetails",
         component: () => import("../pages/EventDetails.vue"),
