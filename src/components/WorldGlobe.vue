@@ -1,22 +1,28 @@
 <template>
-  <div
-    class="relative h-[420px] w-full overflow-hidden rounded-3xl border border-orange-500/20 bg-[#050505] md:h-[650px]"
-  >
-    <div
-      ref="globeContainer"
-      class="h-full w-full cursor-grab active:cursor-grabbing"
-    ></div>
+  <div ref="wrapper"
+    class="relative h-[420px] w-full overflow-hidden rounded-3xl border border-orange-500/20 bg-[#050505] md:h-[650px]">
+    <div ref="globeContainer" class="relative z-10 h-full w-full cursor-grab active:cursor-grabbing"></div>
 
-    <!-- Event card overlay -->
+    <!-- Event card overlay that follows the spike -->
     <Transition name="event-card">
-      <div
-        v-if="activeEvent && activeEvent.visible"
-        class="absolute right-5 top-5 z-30 w-[280px] rounded-3xl border border-orange-500/60 bg-black/80 p-5 text-white shadow-[0_0_35px_rgba(249,115,22,0.35)] backdrop-blur-xl md:right-8 md:top-8"
-      >
+      <div v-if="activeEvent && activeEvent.visible"
+        class="absolute z-30 w-[280px] -translate-y-1/2 rounded-3xl border border-orange-500/60 bg-black/80 p-5 text-white shadow-[0_0_35px_rgba(249,115,22,0.35)] backdrop-blur-xl"
+        :style="{
+          left: `${Math.min(activeEvent.screenX + 24, windowWidth - 310)}px`,
+          top: `${activeEvent.screenY}px`
+        }">
+        <!-- Connector line -->
+        <div
+          class="pointer-events-none absolute left-[-24px] top-1/2 h-[2px] w-6 -translate-y-1/2 bg-orange-500 shadow-[0_0_14px_rgba(249,115,22,0.9)]">
+        </div>
+
+        <!-- Pulse dot beside card -->
+        <div
+          class="pointer-events-none absolute left-[-34px] top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-orange-500 shadow-[0_0_18px_rgba(249,115,22,0.9)]">
+        </div>
+
         <div class="flex items-center gap-4">
-          <div
-            class="grid h-14 w-14 place-items-center rounded-2xl bg-orange-500/15 text-3xl"
-          >
+          <div class="grid h-14 w-14 place-items-center rounded-2xl bg-orange-500/15 text-3xl">
             {{ activeEvent.icon }}
           </div>
 
@@ -24,6 +30,7 @@
             <h3 class="text-lg font-black leading-tight">
               {{ activeEvent.title }}
             </h3>
+
             <p class="mt-1 text-xs font-bold text-orange-400">
               {{ activeEvent.category }}
             </p>
@@ -37,26 +44,23 @@
         </div>
 
         <button
-          class="mt-5 w-full rounded-xl bg-orange-500 py-3 text-sm font-black text-white transition hover:bg-orange-600"
-        >
+          class="mt-5 w-full rounded-xl bg-orange-500 py-3 text-sm font-black text-white transition hover:bg-orange-600">
           View Event Details
         </button>
 
         <button
-          class="mt-3 w-full rounded-xl border border-purple-500/40 py-3 text-sm font-black text-purple-300 transition hover:bg-purple-500/10"
-        >
+          class="mt-3 w-full rounded-xl border border-purple-500/40 py-3 text-sm font-black text-purple-300 transition hover:bg-purple-500/10">
           Follow Event
         </button>
       </div>
     </Transition>
 
     <div
-      class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_35%,rgba(120,35,190,0.14)_70%,rgba(0,0,0,0.55)_100%)]"
-    ></div>
+      class="pointer-events-none absolute inset-0 z-20 bg-[radial-gradient(circle_at_center,transparent_35%,rgba(120,35,190,0.14)_70%,rgba(0,0,0,0.55)_100%)]">
+    </div>
 
     <div
-      class="pointer-events-none absolute bottom-5 left-1/2 z-30 -translate-x-1/2 rounded-full border border-white/10 bg-black/50 px-4 py-2 text-xs text-gray-300"
-    >
+      class="pointer-events-none absolute bottom-5 left-1/2 z-40 -translate-x-1/2 rounded-full border border-white/10 bg-black/50 px-4 py-2 text-xs text-gray-300">
       Drag to rotate • Scroll to zoom • Hover orange spikes
     </div>
   </div>
@@ -71,6 +75,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 const globeContainer = ref(null)
 const activeEvent = ref(null)
 
+const windowWidth = ref(1200)
+
 let scene
 let camera
 let renderer
@@ -79,7 +85,6 @@ let controls
 let animationFrame
 let raycaster
 let mouse
-let hoveredEventId = null
 
 const worldEvents = [
   {
@@ -94,7 +99,36 @@ const worldEvents = [
     icon: '🏆',
     color: '#ff7a00',
     visible: true,
+    locked: false,
+    screenX: 0,
+    screenY: 0,
   },
+  {
+    id: 2,
+    title: "Digital PayExpo 2026",
+    category: "FinTech",
+    subCategory: "Conference",
+    location: "Landmark Events Centre, Lagos",
+    region: "Africa",
+    country: "Nigeria",
+    city: "Lagos",
+    date: "17 Jun 2026",
+    startDate: "2026-06-17",
+    endDate: "2026-06-17",
+    description:
+      "Africa's premier exhibition and conference for digital payments and financial technology.",
+    lat: 6.4281,
+    lng: 3.4219,
+    icon: "💳",
+    color: "#7823BE",
+    featured: true,
+    official: true,
+    image: null,
+    visible: true,
+    locked: false,
+    screenX: 0,
+    screenY: 0,
+  }
 ]
 
 const orangeLights = [
@@ -109,33 +143,55 @@ const orangeLights = [
   { lat: -26.2041, lng: 28.0473, size: 0.16 },
 ]
 
-const getEventVector = (event) => {
+const getEventVector = (event, radius = 112) => {
   const lat = THREE.MathUtils.degToRad(event.lat)
   const lng = THREE.MathUtils.degToRad(event.lng)
 
-  return new THREE.Vector3(
-    Math.cos(lat) * Math.sin(lng),
-    Math.sin(lat),
-    Math.cos(lat) * Math.cos(lng)
-  )
+  const x = radius * Math.cos(lat) * Math.sin(lng)
+  const y = radius * Math.sin(lat)
+  const z = radius * Math.cos(lat) * Math.cos(lng)
+
+  return new THREE.Vector3(x, y, z)
 }
 
-const isEventOnFrontSide = (event) => {
-  if (!camera || !globe) return false
+const getProjectedEventPosition = (event) => {
+  if (!camera || !globe || !globeContainer.value) return null
 
-  const eventVector = getEventVector(event)
+  const width = globeContainer.value.clientWidth
+  const height = globeContainer.value.clientHeight
 
-  eventVector.applyEuler(globe.rotation)
+  const vector = getEventVector(event)
+
+  vector.applyEuler(globe.rotation)
+  vector.project(camera)
+
+  const screenX = (vector.x * 0.5 + 0.5) * width
+  const screenY = (-vector.y * 0.5 + 0.5) * height
 
   const cameraDirection = new THREE.Vector3()
   camera.getWorldDirection(cameraDirection)
 
-  return eventVector.dot(cameraDirection) < -0.15
+  const frontVector = getEventVector(event, 1)
+  frontVector.applyEuler(globe.rotation)
+
+  const visible = frontVector.dot(cameraDirection) < -0.15
+
+  return {
+    screenX,
+    screenY,
+    visible,
+  }
 }
 
-const updateEventVisibility = () => {
+const updateEventPositions = () => {
   worldEvents.forEach((event) => {
-    event.visible = isEventOnFrontSide(event)
+    const projected = getProjectedEventPosition(event)
+
+    if (!projected) return
+
+    event.screenX = projected.screenX
+    event.screenY = projected.screenY
+    event.visible = projected.visible
   })
 
   if (activeEvent.value) {
@@ -144,11 +200,14 @@ const updateEventVisibility = () => {
     if (!updatedEvent?.visible) {
       activeEvent.value = null
       controls.autoRotate = true
-    } else {
-      activeEvent.value = {
-        ...activeEvent.value,
-        visible: updatedEvent.visible,
-      }
+      return
+    }
+
+    activeEvent.value = {
+      ...activeEvent.value,
+      screenX: updatedEvent.screenX,
+      screenY: updatedEvent.screenY,
+      visible: updatedEvent.visible,
     }
   }
 }
@@ -171,17 +230,20 @@ const handlePointerMove = (event) => {
 
   if (eventHit) {
     const eventData = eventHit.object.__data
+    const updatedEvent = worldEvents.find((item) => item.id === eventData.id)
 
-    if (eventData.visible) {
-      hoveredEventId = eventData.id
-      activeEvent.value = { ...eventData }
+    if (updatedEvent?.visible) {
+      activeEvent.value = {
+        ...updatedEvent,
+        locked: activeEvent.value?.locked || false,
+      }
+
       controls.autoRotate = false
       globeContainer.value.style.cursor = 'pointer'
       return
     }
   }
 
-  hoveredEventId = null
   globeContainer.value.style.cursor = 'grab'
 
   if (!activeEvent.value?.locked) {
@@ -195,15 +257,13 @@ const handlePointerClick = () => {
 
   activeEvent.value = {
     ...activeEvent.value,
-    locked: true,
+    locked: !activeEvent.value.locked,
   }
 
-  controls.autoRotate = false
+  controls.autoRotate = !activeEvent.value.locked
 }
 
 const handlePointerLeave = () => {
-  hoveredEventId = null
-
   if (globeContainer.value) {
     globeContainer.value.style.cursor = 'grab'
   }
@@ -325,7 +385,7 @@ const initGlobe = async () => {
 
 const animate = () => {
   controls.update()
-  updateEventVisibility()
+  updateEventPositions()
   renderer.render(scene, camera)
   animationFrame = requestAnimationFrame(animate)
 }
@@ -335,6 +395,7 @@ const handleResize = () => {
 
   const width = globeContainer.value.clientWidth
   const height = globeContainer.value.clientHeight
+  windowWidth.value = globeContainer.value.clientWidth
 
   camera.aspect = width / height
   camera.updateProjectionMatrix()
@@ -343,6 +404,7 @@ const handleResize = () => {
 
 onMounted(() => {
   initGlobe()
+  windowWidth.value = globeContainer.value.clientWidth
   window.addEventListener('resize', handleResize)
 })
 
