@@ -95,6 +95,13 @@ const routes = [
         path: "all-events",
         name: "AllEvents",
         component: () => import("../pages/dashboard/AllEvents.vue"),
+        meta: { role: "superadmin" },
+      },
+      {
+        path: "import-events",
+        name: "ImportEvents",
+        component: () => import("../pages/dashboard/ImportEvents.vue"),
+        meta: { role: "superadmin" },
       },
       {
         path: "organizer-onboarding",
@@ -146,5 +153,14 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+router.beforeEach((to) => {
+  if (!to.path.startsWith('/dashboard')) return true
+  let user = null
+  try { user = JSON.parse(localStorage.getItem('eventoga_user') || 'null') } catch { /* stale session */ }
+  if (!localStorage.getItem('eventoga_token') || !user?.id) return '/auth?tab=login'
+  if (to.meta.role && !user.roles?.includes(to.meta.role)) return '/dashboard'
+  return true
+})
 
 export default router;

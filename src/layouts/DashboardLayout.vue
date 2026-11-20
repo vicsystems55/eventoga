@@ -33,8 +33,8 @@
             v-if="showProfileMenu"
             class="fixed right-4 top-16 z-50 w-48 rounded-2xl border border-white/10 bg-[#0b0b0b]/95 p-2 shadow-lg lg:hidden"
           >
-            <button @click="goToWallet" class="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-white/5">My Wallet</button>
-            <button @click="goToProfile" class="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-white/5">Profile</button>
+            <button v-if="!isSuperadmin" @click="goToWallet" class="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-white/5">My Wallet</button>
+            <button v-if="!isSuperadmin" @click="goToProfile" class="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-white/5">Profile</button>
             <div class="border-t border-white/5 my-1"></div>
             <button @click="logout" class="w-full text-left rounded-xl px-3 py-2 text-sm text-red-400 hover:bg-white/5">Logout</button>
           </div>
@@ -78,7 +78,7 @@
         <!-- Menu -->
         <nav class="mt-10 space-y-2">
           <router-link
-            v-for="item in menuItems"
+            v-for="item in visibleMenuItems"
             :key="item.path"
             :to="item.path"
             @click="isSidebarOpen = false"
@@ -274,8 +274,8 @@
             v-if="showProfileMenu"
             class="absolute right-0 mt-3 w-48 rounded-2xl border border-white/10 bg-[#0b0b0b]/95 z-50 p-2 shadow-lg"
           >
-            <button @click="goToWallet" class="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-white/5">My Wallet</button>
-            <button @click="goToProfile" class="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-white/5">Profile</button>
+            <button v-if="!isSuperadmin" @click="goToWallet" class="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-white/5">My Wallet</button>
+            <button v-if="!isSuperadmin" @click="goToProfile" class="w-full text-left rounded-xl px-3 py-2 text-sm hover:bg-white/5">Profile</button>
             <div class="border-t border-white/5 my-1"></div>
             <button @click="logout" class="w-full text-left rounded-xl px-3 py-2 text-sm text-red-400 hover:bg-white/5">Logout</button>
           </div>
@@ -290,7 +290,7 @@
 </template>
 
 <script setup>
-import { ref, h, onMounted, onUnmounted } from 'vue'
+import { ref, h, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const showNotifications = ref(false)
@@ -300,32 +300,7 @@ const mobileProfileRef = ref(null)
 
 const router = useRouter()
 
-const notifications = ref([
-  {
-    id: 1,
-    title: 'Event Approved',
-    message: 'Your Lagos Afrobeats Night has been approved and is now live.',
-    time: '5 mins ago',
-    icon: '🎉',
-    iconBg: 'bg-green-500/15 text-green-400',
-  },
-  {
-    id: 2,
-    title: 'Ticket Purchase',
-    message: '3 attendees just booked VIP tickets for your event.',
-    time: '20 mins ago',
-    icon: '🎟️',
-    iconBg: 'bg-orange-500/15 text-orange-400',
-  },
-  {
-    id: 3,
-    title: 'Payout Update',
-    message: 'Your payout of ₦48,500 is being processed.',
-    time: '1 hour ago',
-    icon: '💳',
-    iconBg: 'bg-purple-500/15 text-purple-300',
-  },
-])
+const notifications = ref([])
 
 const markAllRead = () => {
   notifications.value = []
@@ -397,6 +372,7 @@ const menuItems = [
   { label: 'Dashboard', path: '/dashboard', icon: DashboardIcon },
   { label: 'My Events', path: '/dashboard/my-events', icon: CalendarIcon },
   { label: 'All Events', path: '/dashboard/all-events', icon: CalendarIcon },
+  { label: 'Import Events', path: '/dashboard/import-events', icon: CalendarIcon, role: 'superadmin' },
   { label: 'Create Event', path: '/dashboard/create-event', icon: PlusIcon },
   { label: 'Tickets / Sales', path: '/dashboard/bookings', icon: TicketIcon },
   { label: 'Marketplace', path: '/dashboard/marketplace', icon: StoreIcon },
@@ -410,6 +386,13 @@ const menuItems = [
 
 
 const currentUser = JSON.parse(localStorage.getItem('eventoga_user') || '{}')
+const isSuperadmin = currentUser.roles?.includes('superadmin')
+const visibleMenuItems = computed(() => {
+  if (isSuperadmin) {
+    return menuItems.filter(item => ['/dashboard', '/dashboard/all-events', '/dashboard/import-events'].includes(item.path))
+  }
+  return menuItems.filter(item => !item.role)
+})
 
 const userInitial = currentUser?.name
   ? currentUser.name.charAt(0).toUpperCase()
@@ -434,6 +417,7 @@ const logout = () => {
   try {
     localStorage.removeItem('eventoga_user')
     localStorage.removeItem('eventoga_token')
+    localStorage.removeItem('eventoga_refresh_token')
     localStorage.removeItem('role')
   } catch (e) {
     // ignore

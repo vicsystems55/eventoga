@@ -35,6 +35,11 @@ export const eventService = {
     return data.data;
   },
 
+  async reviewEvent(id, action, note = '') {
+    const { data } = await api.post(`/admin/events/${id}/${action}`, { note });
+    return data.data;
+  },
+
   async certifyEvent(id) {
     const { data } = await api.post(`/admin/events/${id}/certify`);
     return data;

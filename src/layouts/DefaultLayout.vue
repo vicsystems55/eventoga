@@ -309,6 +309,7 @@ const logout = () => {
   try {
     localStorage.removeItem('eventoga_user')
     localStorage.removeItem('eventoga_token')
+    localStorage.removeItem('eventoga_refresh_token')
     localStorage.removeItem('role')
   } catch (e) {
     // ignore

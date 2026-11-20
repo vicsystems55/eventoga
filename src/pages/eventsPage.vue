@@ -232,7 +232,7 @@
                         v-if="event.event_type !== 'free'"
                         class="text-xs text-gray-500"
                       >
-                        from
+                        {{ event.source_type === 'import' ? 'At original source' : 'from' }}
                       </p>
                     </div>
 
@@ -240,7 +240,7 @@
                       @click.stop="goToEvent(event)"
                       class="rounded-lg bg-orange-500 px-4 py-2 text-sm font-bold transition hover:bg-orange-600"
                     >
-                      Book Now
+                      {{ event.source_type === 'import' ? 'View Details' : 'Book Now' }}
                     </button>
                   </div>
                 </div>
@@ -370,9 +370,9 @@
 
                 <div>
                   <h3 class="mb-3 text-xl font-bold text-orange-500">Organizer</h3>
-                  <p class="text-gray-300">
-                    {{ selectedEvent.organizer?.name || 'Event Organizer' }}
-                  </p>
+                  <p class="text-gray-300">{{ selectedEvent.organizer?.name || selectedEvent.source_name || 'External organizer' }}</p>
+                  <p v-if="selectedEvent.source_type === 'import'" class="mt-3 text-sm text-gray-400">Information supplied by an external source. EventOga has not verified this listing.</p>
+                  <a v-if="selectedEvent.source_type === 'import'" :href="selectedEvent.source_url" target="_blank" rel="noopener noreferrer" class="mt-2 inline-block text-sm text-orange-400 underline">View original listing</a>
                 </div>
               </div>
 
@@ -387,13 +387,13 @@
                       v-if="selectedEvent.event_type !== 'free'"
                       class="text-sm text-gray-400"
                     >
-                      starting price
+                      {{ selectedEvent.source_type === 'import' ? 'Check price at original source' : 'starting price' }}
                     </p>
                   </div>
 
                   <div class="space-y-3">
                     <div
-                      v-if="selectedEvent.event_type !== 'free'"
+                      v-if="selectedEvent.source_type !== 'import' && selectedEvent.event_type !== 'free'"
                       class="flex items-center justify-between text-sm"
                     >
                       <span>Quantity:</span>
@@ -419,7 +419,7 @@
                     </div>
 
                     <div
-                      v-if="selectedEvent.event_type !== 'free'"
+                      v-if="selectedEvent.source_type !== 'import' && selectedEvent.event_type !== 'free'"
                       class="flex items-center justify-between border-t border-white/10 pt-3"
                     >
                       <span class="font-bold">Total:</span>
@@ -429,12 +429,12 @@
                     </div>
 
                     <button @click="goToEvent(selectedEvent)" class="w-full rounded-xl bg-orange-500 py-3 font-black transition hover:bg-orange-600">
-                      Book Now
+                      {{ selectedEvent.source_type === 'import' ? 'View full details' : 'Book Now' }}
                     </button>
                   </div>
                 </div>
 
-                <div class="rounded-2xl bg-white/5 p-4">
+                <div v-if="selectedEvent.source_type !== 'import'" class="rounded-2xl bg-white/5 p-4">
                   <div class="mb-2 flex items-center gap-2 text-sm">
                     <span class="text-green-500">✓</span>
                     <span>{{ selectedEvent.is_verified ? 'Verified Event' : 'Listed Event' }}</span>
@@ -604,6 +604,7 @@ const clearFilters = () => {
 }
 
 const imageUrl = (event) => {
+  if (event.image_url) return event.image_url
   if (event.banner) return `${apiBaseUrl}/storage/${event.banner}`
   if (event.thumbnail) return `${apiBaseUrl}/storage/${event.thumbnail}`
   return bg1
@@ -657,6 +658,7 @@ const minTicketOrbs = (event) => {
 const minTicketNaira = (event) => minTicketOrbs(event) * 10
 
 const eventPrice = (event) => {
+  if (event.source_type === 'import' && event.event_type !== 'free') return 'See source'
   if (event.event_type === 'free') return 'Free'
 
   const amount = minTicketNaira(event)
@@ -667,10 +669,11 @@ const eventPrice = (event) => {
 }
 
 const getBadgeText = (event) => {
+  if (event.source_type === 'import') return 'External listing'
   if (event.is_verified) return '✅ Verified'
   if (event.is_featured) return '🔥 Featured'
   if (event.event_type === 'free') return 'Free Entry'
-  return event.category?.name || 'Event'
+  return event.category?.name || event.category_name || 'Event'
 }
 
 const getBadgeClass = (event) => {
@@ -689,7 +692,7 @@ const viewEventDetails = (event) => {
 const goToEvent = (event) => {
   if (!event) return
   closeModal()
-  router.push({ name: 'EventDetails', params: { id: event.id } })
+  router.push({ name: 'EventDetails', params: { id: event.slug } })
 }
 
 const closeModal = () => {

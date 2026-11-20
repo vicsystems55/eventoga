@@ -45,6 +45,7 @@
             class="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
             {{ errorMessage }}
           </div>
+          <div v-if="successMessage" class="mb-4 rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-300">{{ successMessage }}</div>
 
           <div class="overflow-hidden rounded-[2rem] border border-white/10 bg-black/55 backdrop-blur-xl glow-mix">
             <!-- Tabs -->
@@ -222,6 +223,7 @@ const route = useRoute()
 const router = useRouter()
 const isLoading = ref(false)
 const errorMessage = ref('')
+const successMessage = ref('')
 
 const loginForm = ref({
   email: '',
@@ -250,6 +252,7 @@ const handleLogin = async () => {
   try {
     isLoading.value = true
     errorMessage.value = ''
+    successMessage.value = ''
 
     await authService.login({
       email: loginForm.value.email,
@@ -273,6 +276,7 @@ const handleRegister = async () => {
   try {
     isLoading.value = true
     errorMessage.value = ''
+    successMessage.value = ''
 
     const response = await authService.register({
       name: `${registerForm.value.firstName} ${registerForm.value.lastName}`,
@@ -283,7 +287,11 @@ const handleRegister = async () => {
       intent: registerAsOrganizer.value ? 'organizer' : 'attendee',
     })
 
-    await router.push(response.next_step || '/dashboard')
+    if (response.token) await router.push(response.next_step || '/dashboard')
+    else {
+      successMessage.value = response.message || 'Confirm your email, then log in.'
+      activeTab.value = 'login'
+    }
   } catch (error) {
     errorMessage.value =
       error.response?.data?.message ||

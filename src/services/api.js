@@ -7,6 +7,12 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 })
+let refreshPromise = null
+const clearSession = () => {
+  localStorage.removeItem('eventoga_token')
+  localStorage.removeItem('eventoga_refresh_token')
+  localStorage.removeItem('eventoga_user')
+}
 
 api.interceptors.request.use(
   (config) => {
@@ -28,13 +34,24 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('eventoga_token')
-      localStorage.removeItem('eventoga_user')
+  async (error) => {
+    const original = error.config
+    if (error.response?.status !== 401 || !original || original._retried || original.url?.includes('/login') || original.url?.includes('/refresh')) return Promise.reject(error)
+    const refreshToken = localStorage.getItem('eventoga_refresh_token')
+    if (!refreshToken) { clearSession(); return Promise.reject(error) }
+    original._retried = true
+    try {
+      refreshPromise ??= axios.post(`${api.defaults.baseURL.replace(/\/$/, '')}/refresh`, { refresh_token: refreshToken })
+        .finally(() => { refreshPromise = null })
+      const { data } = await refreshPromise
+      localStorage.setItem('eventoga_token', data.token)
+      localStorage.setItem('eventoga_refresh_token', data.refresh_token)
+      original.headers.Authorization = `Bearer ${data.token}`
+      return api(original)
+    } catch (refreshError) {
+      clearSession()
+      return Promise.reject(refreshError)
     }
-
-    return Promise.reject(error)
   }
 )
 
