@@ -5,7 +5,7 @@
       <div class="flex items-center gap-2 text-2xl font-black md:text-3xl">
         <router-link to="/" class="flex items-center gap-2 hover:text-orange-500 transition">
           <span>Event<span class="text-orange-500">Oga</span></span>
-          <span class="text-2xl">🎟️</span>
+          <Ticket :size="25" class="text-orange-400" aria-hidden="true" />
         </router-link>
       </div>
 
@@ -49,9 +49,9 @@
       </div>
 
       <div class="hidden items-center gap-3 md:flex">
-        <button class="rounded-xl border border-white/30 px-5 py-3 text-sm font-bold hover:border-orange-500 transition">
-          📍 Lagos⌄
-        </button>
+        <router-link to="/events" class="inline-flex items-center gap-2 rounded-xl border border-white/20 px-5 py-3 text-sm font-bold transition hover:border-orange-500 hover:text-orange-400">
+          <Compass :size="17" aria-hidden="true" /> Explore events
+        </router-link>
 
         <template v-if="isLoggedIn">
           <div ref="profileRef" class="relative">
@@ -68,7 +68,7 @@
                 <h4 class="text-sm font-black">{{ currentUser.name }}</h4>
               </div>
 
-              <span class="text-gray-500">⌄</span>
+              <ChevronDown :size="17" class="text-gray-500" aria-hidden="true" />
             </button>
 
             <Transition name="fade-scale">
@@ -106,11 +106,7 @@
         @click="isMenuOpen = true"
         class="grid h-11 w-11 place-items-center rounded-xl border border-white/15 bg-white/5 md:hidden"
       >
-        <span class="space-y-1.5">
-          <span class="block h-0.5 w-6 bg-white"></span>
-          <span class="block h-0.5 w-6 bg-white"></span>
-          <span class="block h-0.5 w-6 bg-white"></span>
-        </span>
+        <Menu :size="23" aria-hidden="true" />
       </button>
     </nav>
 
@@ -128,7 +124,7 @@
             class="absolute right-0 top-0 h-full w-64 overflow-y-auto bg-[#0a0a0a] p-6"
           >
             <button @click="isMenuOpen = false" class="mb-6 text-gray-400 hover:text-white">
-              ✕
+              <X :size="22" aria-hidden="true" />
             </button>
 
             <div class="space-y-4">
@@ -278,6 +274,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { ChevronDown, Compass, Menu, Ticket, X } from '@lucide/vue'
 
 const route = useRoute()
 const router = useRouter()

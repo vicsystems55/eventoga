@@ -1,402 +1,172 @@
 <template>
-  <div class="ambient-bg">
-    <!-- Header -->
-    <section data-aos="fade-up" class="w-full px-4 pt-10 md:px-6 md:pt-14 lg:px-8">
-      <div class="relative mx-auto max-w-7xl">
-        <div class="grid items-center gap-10 md:grid-cols-[1fr_1.1fr]">
-          <div class="relative z-20">
-            <span data-aos="fade-up" data-aos-delay="100"
-              class="rounded-full bg-orange-500/10 px-4 py-3 text-xs font-bold text-orange-400 glow-orange-soft md:px-5 md:text-sm">
-              #1 Events Discovery Platform in Nigeria
-            </span>
+  <main class="home-shell min-h-screen overflow-hidden text-white">
+    <section class="relative mx-auto grid max-w-7xl items-center gap-10 px-5 pb-14 pt-14 md:px-8 md:pb-20 md:pt-20 lg:grid-cols-[1.06fr_.94fr] lg:gap-4 lg:pt-24">
+      <div class="relative z-10">
+        <div class="inline-flex items-center gap-2 rounded-full border border-orange-400/30 bg-orange-400/10 px-4 py-2 text-xs font-bold uppercase tracking-[.2em] text-orange-300">
+          <span class="h-2 w-2 rounded-full bg-orange-400 shadow-[0_0_12px_#fb923c]"></span>
+          Your next outing starts here
+        </div>
+        <h1 class="mt-7 max-w-3xl text-[clamp(3.15rem,7vw,6.6rem)] font-black leading-[.98] tracking-[-.055em]">
+          Go where<br />the <span class="hero-accent">good stuff</span><br />happens.
+        </h1>
+        <p class="mt-7 max-w-xl text-base leading-8 text-zinc-300 md:text-lg">
+          Explore concerts, conferences, creative gatherings and more happening across Nigeria. Find the details, then follow the original source for tickets.
+        </p>
 
-            <h1 data-aos="fade-up" data-aos-delay="200"
-              class="mt-6 max-w-xl text-4xl font-black leading-tight tracking-tight md:mt-8 md:max-w-2xl md:text-7xl">
-              Find Events Near Me.
-              <br />
-              Live More,
-              <span class="text-orange-500"> Worry Less.</span>
-            </h1>
+        <form class="mt-9 flex max-w-xl flex-col gap-3 rounded-2xl border border-white/15 bg-[#141019]/90 p-2 shadow-[0_24px_70px_rgba(0,0,0,.32)] sm:flex-row" @submit.prevent="searchEvents">
+          <label class="flex min-w-0 flex-1 items-center gap-3 rounded-xl px-4 py-3 text-zinc-400">
+            <Search :size="21" aria-hidden="true" />
+            <span class="sr-only">Search events or cities</span>
+            <input v-model.trim="search" type="search" placeholder="Search events or cities" class="w-full min-w-0 bg-transparent text-sm text-white placeholder:text-zinc-500 focus:outline-none" />
+          </label>
+          <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-orange-500 px-6 py-3.5 text-sm font-extrabold text-black transition hover:bg-orange-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400">
+            Find events <ArrowRight :size="18" aria-hidden="true" />
+          </button>
+        </form>
 
-            <p data-aos="fade-up" data-aos-delay="300"
-              class="mt-6 max-w-xl text-base leading-8 text-gray-300 md:text-lg">
-              Discover and book amazing events, connect with verified organizers and enjoy
-              trusted experiences around you.
-            </p>
+        <div class="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-zinc-400">
+          <span class="inline-flex items-center gap-2"><Compass :size="17" class="text-orange-400" aria-hidden="true" /> Discover what is coming up</span>
+          <span class="inline-flex items-center gap-2"><ExternalLink :size="17" class="text-violet-400" aria-hidden="true" /> Check the original listing</span>
+        </div>
+      </div>
 
-            <div data-aos="fade-up" data-aos-delay="400"
-              class="mt-8 max-w-3xl rounded-2xl bg-[#080808] p-3 glow-purple">
-              <div class="grid gap-3 md:grid-cols-[1.3fr_1fr_auto]">
-                <div
-                  class="flex items-center gap-3 rounded-xl bg-black px-4 py-4 text-gray-400 ring-1 ring-purple-500/30">
-                  <span>⌕</span>
-                  <input class="w-full bg-transparent text-sm text-white outline-none"
-                    placeholder="Search events, concerts, parties..." />
-                </div>
-
-                <div
-                  class="flex items-center gap-3 rounded-xl bg-black px-4 py-4 text-gray-400 ring-1 ring-purple-500/30">
-                  <span>📍</span>
-                  <input class="w-full bg-transparent text-sm text-white outline-none" placeholder="Lagos, Nigeria" />
-                </div>
-
-                <button
-                  class="rounded-xl bg-orange-500 px-7 py-4 text-sm font-black text-white transition hover:bg-orange-400 glow-orange">
-                  Search Events
-                </button>
-              </div>
-            </div>
-
-            <div data-aos="fade-up" data-aos-delay="500"
-              class="mt-8 flex flex-wrap gap-4 text-sm font-bold text-gray-200 md:gap-8">
-              <span class="flex items-center gap-2"><b
-                  class="rounded-full bg-orange-500/15 px-2 py-1 text-orange-500">✓</b>Verified Events</span>
-              <span class="flex items-center gap-2"><b
-                  class="rounded-full bg-orange-500/15 px-2 py-1 text-orange-500">📍</b>Safe Locations</span>
-              <span class="flex items-center gap-2"><b
-                  class="rounded-full bg-orange-500/15 px-2 py-1 text-orange-500">💳</b>Secure Payments</span>
-              <span class="flex items-center gap-2"><b
-                  class="rounded-full bg-orange-500/15 px-2 py-1 text-orange-500">⏱</b>24/7 Support</span>
-            </div>
-          </div>
-
-          <div data-aos="fade-left" data-aos-delay="200" class="relative hidden min-h-[520px] md:block">
-            <div class="absolute right-0 top-0 h-[560px] w-[760px]">
-              <img src="../assets/bg1.png" alt="EventOga users"
-                class="h-full w-full object-contain object-right-bottom" />
-            </div>
-
-            <div data-aos="fade-up" data-aos-delay="400"
-              class="absolute bottom-20 right-0 z-20 w-72 rounded-3xl border border-orange-500/30 bg-[#2b1208]/90 p-6 shadow-2xl backdrop-blur glow-mix">
-              <div class="flex gap-4">
-                <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-500/20 text-3xl">
-                  👑
-                </div>
-
-                <div>
-                  <h3 class="text-lg font-black">Go Premium</h3>
-                  <p class="mt-1 text-xs leading-5 text-gray-300">
-                    Get early alerts, free passes, reserved seats and more!
-                  </p>
-                </div>
-              </div>
-
-              <button
-                class="mt-5 flex w-full items-center justify-between rounded-xl border border-orange-500/40 px-5 py-3 text-sm font-black">
-                Explore Plans <span class="text-orange-500">→</span>
-              </button>
-            </div>
-          </div>
+      <div class="hero-art relative mx-auto h-[350px] w-full max-w-[600px] md:h-[510px] lg:h-[620px]" aria-hidden="true">
+        <div class="absolute inset-[6%_4%_6%_4%] rounded-full bg-[radial-gradient(circle,rgba(241,96,29,.38),rgba(105,34,152,.25)_46%,transparent_70%)] blur-3xl"></div>
+        <div class="absolute left-[9%] top-[5%] h-28 w-28 rounded-full border border-orange-400/25"></div>
+        <div class="absolute right-[4%] top-[13%] h-10 w-10 rotate-12 rounded-lg border border-violet-400/50 bg-violet-500/15"></div>
+        <img :src="heroImage" alt="" class="absolute bottom-0 left-1/2 w-[115%] max-w-none -translate-x-1/2 drop-shadow-[0_35px_65px_rgba(0,0,0,.55)]" />
+        <div class="absolute bottom-[5%] left-[2%] inline-flex items-center gap-3 rounded-2xl border border-white/15 bg-[#17101d]/90 px-4 py-3 shadow-xl backdrop-blur-lg sm:left-[7%]">
+          <span class="grid h-10 w-10 place-items-center rounded-xl bg-orange-500/20 text-orange-400"><CalendarDays :size="21" /></span>
+          <span><strong class="block text-sm">Find your next event</strong><small class="text-xs text-zinc-400">Across Nigeria</small></span>
         </div>
       </div>
     </section>
 
-    <!-- Popular Events -->
-    <section data-aos="fade-up" class="mt-10 w-full px-4 md:px-6 lg:px-8">
-      <div class="mx-auto max-w-7xl">
-        <div class="rounded-3xl border border-purple-500/30 bg-[#0b0b0b] p-5 glow-purple">
-          <div class="mb-6 flex items-center justify-between">
-            <h2 class="text-2xl font-black">Popular Events Near You 🔥</h2>
-            <router-link to="/events" class="text-sm font-bold text-orange-500">View all events →</router-link>
-          </div>
-
-          <div class="grid gap-5 md:grid-cols-4">
-            <div v-for="(event, index) in events" :key="event.title" data-aos="zoom-in" :data-aos-delay="index * 100"
-              class="overflow-hidden rounded-2xl border border-white/10 bg-[#111] transition hover:-translate-y-2 hover:border-orange-500/50 hover:shadow-[0_0_35px_rgba(255,106,0,0.25)]">
-              <div class="relative h-36">
-                <img :src="event.image" class="h-full w-full object-cover" />
-                <span class="absolute left-3 top-3 rounded-full px-3 py-1 text-xs font-black text-white"
-                  :class="event.verified ? 'bg-green-600' : 'bg-orange-500'">
-                  {{ event.tag }}
-                </span>
-              </div>
-
-              <div class="p-4">
-                <div class="flex gap-3">
-                  <div class="rounded-xl bg-orange-500/20 px-3 py-2 text-center">
-                    <p class="text-xl font-black">{{ event.day }}</p>
-                    <p class="text-xs font-bold text-orange-400">{{ event.month }}</p>
-                  </div>
-
-                  <div>
-                    <h3 class="font-black">{{ event.title }}</h3>
-                    <p class="mt-1 text-xs text-gray-400">📍 {{ event.location }}</p>
-                  </div>
-                </div>
-
-                <div class="mt-5 flex items-center justify-between">
-                  <p class="text-lg font-black">{{ event.price }}</p>
-                  <p class="text-sm font-bold text-gray-300">⭐ {{ event.rating }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <section class="relative border-y border-white/10 bg-white/[.025] px-5 py-5 md:px-8">
+      <div class="mx-auto flex max-w-7xl flex-wrap items-center gap-3">
+        <span class="mr-2 text-xs font-bold uppercase tracking-[.2em] text-zinc-500">Explore by category</span>
+        <template v-if="categories.length">
+          <router-link v-for="category in featuredCategories" :key="category.id" :to="{ path: '/events', query: { category: category.slug } }" class="category-pill inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-zinc-200 transition hover:border-orange-400/50 hover:bg-orange-400/10 hover:text-white">
+            <component :is="categoryIcon(category.slug)" :size="15" class="text-orange-400" aria-hidden="true" />{{ category.name }}
+          </router-link>
+        </template>
+        <router-link to="/events" class="inline-flex items-center gap-1 px-2 py-2 text-sm font-bold text-orange-400 hover:text-orange-300">All categories <ArrowRight :size="15" aria-hidden="true" /></router-link>
       </div>
     </section>
 
-    <!-- Marketplace -->
-    <section data-aos="fade-up" class="mt-8 w-full px-4 md:px-6 lg:px-8">
-      <div class="mx-auto max-w-7xl">
-        <div
-          class="grid gap-8 rounded-3xl border border-orange-500 bg-[#120905] p-8 glow-orange md:grid-cols-[1fr_2fr]">
-          <div data-aos="fade-right" class="flex flex-col justify-center">
-            <h2 class="text-4xl font-black leading-tight">
-              Everything You Need
-              <span class="block text-orange-500">For Your Event</span>
-            </h2>
-
-            <p class="mt-5 max-w-sm leading-7 text-gray-300">
-              Rent equipment, hire vendors, book entertainers, and get everything you need in one place.
-            </p>
-
-            <router-link to="/marketplace"
-              class="mt-7 w-fit rounded-xl bg-orange-500 px-6 py-4 font-black text-black transition hover:scale-105 glow-orange inline-block">
-              Explore Marketplace →
-            </router-link>
-          </div>
-
-          <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <div v-for="(vendor, index) in vendors" :key="vendor.name" data-aos="flip-left"
-              :data-aos-delay="index * 100"
-              class="overflow-hidden rounded-2xl border border-orange-500/40 bg-black transition hover:-translate-y-2 hover:shadow-[0_0_35px_rgba(255,106,0,0.25)]">
-              <img :src="vendor.image" class="h-40 w-full object-cover" />
-
-              <div class="p-4">
-                <h3 class="font-black">{{ vendor.name }}</h3>
-                <p class="mt-1 text-sm text-gray-400">{{ vendor.type }}</p>
-              </div>
-            </div>
-          </div>
+    <section class="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24" aria-labelledby="upcoming-heading">
+      <div class="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+        <div>
+          <p class="mb-3 text-xs font-extrabold uppercase tracking-[.24em] text-orange-400">On the calendar</p>
+          <h2 id="upcoming-heading" class="text-3xl font-black tracking-tight md:text-5xl">Upcoming events<span class="text-orange-500">.</span></h2>
+          <p class="mt-3 max-w-xl text-sm leading-6 text-zinc-400">Fresh listings from organizers and public event sources. Open an event to check its details and ticket link.</p>
         </div>
+        <router-link to="/events" class="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-sm font-bold transition hover:border-orange-400 hover:text-orange-300">Browse all events <ArrowUpRight :size="17" aria-hidden="true" /></router-link>
+      </div>
+
+      <div v-if="loading" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3" aria-live="polite">
+        <div v-for="item in 6" :key="item" class="h-[370px] animate-pulse rounded-3xl border border-white/10 bg-white/5"></div>
+      </div>
+      <div v-else-if="error" class="rounded-3xl border border-orange-500/25 bg-orange-500/5 p-8 text-center" role="status">
+        <p class="text-lg font-bold">Events are unavailable right now.</p>
+        <p class="mt-2 text-sm text-zinc-400">Please try loading them again.</p>
+        <button class="mt-5 inline-flex items-center gap-2 rounded-xl bg-orange-500 px-5 py-3 font-bold text-black hover:bg-orange-400" @click="loadEvents"><RefreshCw :size="17" /> Try again</button>
+      </div>
+      <div v-else-if="!events.length" class="rounded-3xl border border-white/10 bg-white/[.035] p-10 text-center">
+        <CalendarDays :size="32" class="mx-auto text-orange-400" aria-hidden="true" />
+        <h3 class="mt-4 text-xl font-bold">No upcoming events listed yet</h3>
+        <p class="mt-2 text-sm text-zinc-400">Check back soon for new listings.</p>
+      </div>
+      <div v-else class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <router-link v-for="event in events" :key="event.id" :to="{ name: 'EventDetails', params: { id: event.slug } }" class="event-card group overflow-hidden rounded-3xl border border-white/10 bg-[#131018] transition duration-300 hover:-translate-y-1 hover:border-orange-400/45 focus-visible:outline-2 focus-visible:outline-orange-400">
+          <div class="relative h-52 overflow-hidden bg-[linear-gradient(135deg,#382049,#17101d_55%,#5e2a16)]">
+            <img v-if="event.image_url && !failedImages.has(event.id)" :src="event.image_url" :alt="event.title" loading="lazy" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" @error="markImageFailed(event.id)" />
+            <div v-else class="flex h-full items-center justify-center"><Ticket :size="52" class="text-orange-300/50" aria-hidden="true" /></div>
+            <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#131018] to-transparent"></div>
+            <span class="absolute left-4 top-4 rounded-full border border-white/20 bg-black/60 px-3 py-1.5 text-xs font-bold backdrop-blur-md">{{ event.source_type === 'import' ? 'External listing' : 'Organizer event' }}</span>
+          </div>
+          <div class="p-5">
+            <p class="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-[.14em] text-orange-400"><CalendarDays :size="15" aria-hidden="true" /> {{ formatDate(event.starts_at) }}</p>
+            <h3 class="line-clamp-2 min-h-[3.4rem] text-xl font-extrabold leading-7 tracking-tight">{{ event.title }}</h3>
+            <p class="mt-3 flex items-start gap-2 text-sm text-zinc-400"><MapPin :size="16" class="mt-0.5 shrink-0 text-violet-400" aria-hidden="true" /><span class="line-clamp-1">{{ eventLocation(event) }}</span></p>
+            <div class="mt-5 flex items-center justify-between border-t border-white/10 pt-4"><span class="text-sm font-semibold text-zinc-300">{{ event.event_type === 'free' ? 'Free entry' : 'See ticket details' }}</span><span class="grid h-9 w-9 place-items-center rounded-full bg-orange-500 text-black transition group-hover:bg-orange-400"><ArrowUpRight :size="19" aria-hidden="true" /></span></div>
+          </div>
+        </router-link>
       </div>
     </section>
 
-    <!-- Why Choose + App CTA -->
-    <section class="mt-10 w-full px-4 md:px-6 lg:px-8">
-      <div class="mx-auto max-w-7xl">
-        <div
-          class="grid items-center gap-8 rounded-3xl border border-purple-500/25 bg-[#070707] p-8 glow-purple lg:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <h2 data-aos="fade-right" class="text-4xl font-black leading-tight">
-              Why Choose
-              <span class="block">Event<span class="text-orange-500">Oga?</span></span>
-            </h2>
-
-            <ul class="mt-8 grid gap-4 text-sm font-semibold text-gray-200 sm:grid-cols-2">
-              <li v-for="(item, index) in checklist" :key="item" data-aos="fade-up" :data-aos-delay="index * 100"
-                class="flex gap-3">
-                <svg class="h-6 w-6 flex-shrink-0 stroke-orange-500" fill="none" stroke-width="2" viewBox="0 0 24 24">
-                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                {{ item }}
-              </li>
-            </ul>
-
-            <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <div v-for="(stat, index) in whyStats" :key="stat.label" data-aos="zoom-in-up"
-                :data-aos-delay="index * 100"
-                class="rounded-2xl border border-white/10 bg-[#090909] p-5 text-center transition hover:-translate-y-1 hover:border-orange-500/50 hover:shadow-[0_0_35px_rgba(168,85,247,0.28)]">
-                <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-500/10">
-                  <svg v-if="stat.icon === 'shield'" class="h-10 w-10 stroke-orange-500" fill="none" stroke-width="1.5"
-                    viewBox="0 0 24 24">
-                    <path d="M12 3L4 7v5c0 5 3.5 9 8 10 4.5-1 8-5 8-10V7l-8-4z" />
-                  </svg>
-
-                  <svg v-else-if="stat.icon === 'users'" class="h-10 w-10 stroke-orange-500" fill="none"
-                    stroke-width="1.5" viewBox="0 0 24 24">
-                    <path d="M17 21v-2a4 4 0 00-3-3.87M7 21v-2a4 4 0 013-3.87M12 7a4 4 0 110-8 4 4 0 010 8z" />
-                  </svg>
-
-                  <svg v-else-if="stat.icon === 'check'" class="h-10 w-10 stroke-orange-500" fill="none"
-                    stroke-width="1.5" viewBox="0 0 24 24">
-                    <path d="M20 6L9 17l-5-5" />
-                  </svg>
-
-                  <svg v-else class="h-10 w-10 stroke-orange-500" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
-                    <rect x="3" y="3" width="7" height="7" rx="1" />
-                    <rect x="14" y="3" width="7" height="7" rx="1" />
-                    <rect x="14" y="14" width="7" height="7" rx="1" />
-                    <rect x="3" y="14" width="7" height="7" rx="1" />
-                  </svg>
-                </div>
-
-                <h3 class="text-3xl font-black">{{ stat.value }}</h3>
-                <p class="mt-2 text-sm font-semibold text-gray-300">{{ stat.label }}</p>
-              </div>
-            </div>
-          </div>
-
-          <div data-aos="fade-left"
-            class="relative hidden min-h-[520px] overflow-hidden rounded-3xl bg-orange-500/10 md:block">
-            <div class="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-purple-500/10"></div>
-            <img src="../assets/guy.png" alt="EventOga assistant"
-              class="absolute bottom-[-40px] left-1/2 w-[520px] -translate-x-1/2 pointer-events-none select-none" />
-          </div>
-        </div>
-
-        <!-- App CTA -->
-        <div data-aos="fade-up"
-          class="relative mt-8 overflow-visible rounded-3xl border border-orange-500/40 bg-gradient-to-r from-[#2a0f05] to-[#120603] p-8 glow-mix md:p-10">
-          <div class="relative z-10 grid items-center gap-8 lg:grid-cols-[1.3fr_1.1fr_1fr]">
-            <div>
-              <h2 class="text-4xl font-black">Get the EventOga App</h2>
-              <p class="mt-4 text-lg text-gray-300">
-                Discover events on the go. Get alerts, book tickets and more!
-              </p>
-            </div>
-
-            <div class="flex flex-wrap items-center gap-5">
-              <img data-aos="flip-right" data-aos-delay="100" src="../assets/google-play.png"
-                alt="Get it on Google Play" class="h-20 w-auto rounded-xl transition hover:scale-105" />
-              <img data-aos="flip-right" data-aos-delay="200" src="../assets/ios-store.png"
-                alt="Download on the App Store" class="h-20 w-auto rounded-xl transition hover:scale-105" />
-            </div>
-
-            <div class="relative hidden h-52 lg:block">
-              <img src="../assets/phone.png" alt="EventOga mobile app"
-                class="absolute -bottom-28 -top-24 right-0 w-[640px] rotate-[-8deg] drop-shadow-[0_20px_60px_rgba(255,106,0,0.35)]" />
-            </div>
-          </div>
-
-          <div class="absolute right-20 top-8 h-3 w-3 rotate-45 bg-orange-500"></div>
-          <div class="absolute right-44 top-14 h-2 w-6 rotate-45 rounded-full bg-orange-400"></div>
-          <div class="absolute right-72 bottom-12 h-2 w-2 rotate-45 bg-pink-400"></div>
-          <div class="absolute bottom-10 right-10 h-4 w-8 rotate-[-25deg] rounded-full bg-orange-500"></div>
-        </div>
+    <section class="mx-auto grid max-w-7xl gap-5 px-5 pb-20 md:grid-cols-2 md:px-8 md:pb-28">
+      <div class="relative overflow-hidden rounded-[2rem] border border-orange-400/25 bg-[linear-gradient(135deg,#48200d,#191016_72%)] p-8 md:p-10">
+        <div class="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-orange-500/20 blur-3xl"></div>
+        <PartyPopper :size="31" class="relative text-orange-300" aria-hidden="true" />
+        <h2 class="relative mt-8 max-w-sm text-3xl font-black tracking-tight">Have an event people should know about?</h2>
+        <p class="relative mt-4 max-w-md text-sm leading-7 text-zinc-300">Explore EventOga for organizers and bring your audience together.</p>
+        <router-link to="/organizers" class="relative mt-7 inline-flex items-center gap-2 font-bold text-orange-300 hover:text-white">For organizers <ArrowRight :size="18" aria-hidden="true" /></router-link>
+      </div>
+      <div class="relative overflow-hidden rounded-[2rem] border border-violet-400/25 bg-[linear-gradient(135deg,#321a4c,#15101c_72%)] p-8 md:p-10">
+        <div class="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-violet-500/20 blur-3xl"></div>
+        <Sparkles :size="31" class="relative text-violet-300" aria-hidden="true" />
+        <h2 class="relative mt-8 max-w-sm text-3xl font-black tracking-tight">The event marketplace is taking shape.</h2>
+        <p class="relative mt-4 max-w-md text-sm leading-7 text-zinc-300">A place to discover event services and products is on the way.</p>
+        <router-link to="/marketplace" class="relative mt-7 inline-flex items-center gap-2 font-bold text-violet-300 hover:text-white">Explore the idea <ArrowRight :size="18" aria-hidden="true" /></router-link>
       </div>
     </section>
-  </div>
+  </main>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
-import bg1 from '../assets/bg1.png'
+import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { ArrowRight, ArrowUpRight, BriefcaseBusiness, CalendarDays, Church, Compass, ExternalLink, HeartPulse, Laptop2, MapPin, Music2, Palette, PartyPopper, RefreshCw, Search, Sparkles, Ticket, UsersRound } from '@lucide/vue'
+import { eventService } from '@/services/eventService'
+import { categoryService } from '@/services/categoryService'
+import heroImage from '@/assets/bg1.png'
 
-const checklist = [
-  'Verified organizers & safe locations',
-  'Real reviews from real people',
-  'Secure ticketing & easy refunds',
-  'Events tailored to your interests',
-]
+const router = useRouter()
+const search = ref('')
+const events = ref([])
+const categories = ref([])
+const loading = ref(true)
+const error = ref(false)
+const failedImages = ref(new Set())
+const featuredCategories = computed(() => {
+  const active = new Set(events.value.map(event => event.category_slug))
+  return [...categories.value].sort((a, b) => Number(active.has(b.slug)) - Number(active.has(a.slug))).slice(0, 8)
+})
 
-const whyStats = [
-  { value: '10K+', label: 'Events Hosted', icon: 'shield' },
-  { value: '500K+', label: 'Happy Users', icon: 'users' },
-  { value: '2K+', label: 'Verified Organizers', icon: 'check' },
-  { value: '50+', label: 'Cities Covered', icon: 'grid' },
-]
+const icons = { concerts: Music2, music: Music2, business: BriefcaseBusiness, tech: Laptop2, 'arts-culture': Palette, 'health-wellness': HeartPulse, family: UsersRound, 'church-events': Church, parties: PartyPopper, nightlife: PartyPopper }
+const categoryIcon = slug => icons[slug] || CalendarDays
+const formatDate = value => new Intl.DateTimeFormat('en-NG', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', timeZone: 'Africa/Lagos' }).format(new Date(value))
+const eventLocation = event => event.event_format === 'online' ? 'Online event' : [event.venue_name, event.city].filter(Boolean).join(', ') || 'Location to be announced'
+const markImageFailed = id => { failedImages.value = new Set([...failedImages.value, id]) }
 
-const events = [
-  {
-    title: 'Afrobeats Live Concert',
-    location: 'Eko Convention Centre',
-    price: '₦5,000',
-    rating: '4.8',
-    day: '28',
-    month: 'APR',
-    tag: '🔥 Trending',
-    image: bg1,
-  },
-  {
-    title: 'Tech Summit 2026',
-    location: 'Landmark Centre, Lagos',
-    price: '₦15,000',
-    rating: '4.9',
-    day: '30',
-    month: 'APR',
-    tag: 'Limited Seats',
-    image: bg1,
-  },
-  {
-    title: 'Lagos Beach Party',
-    location: 'Elegushi Beach',
-    price: '₦3,000',
-    rating: '4.7',
-    day: '05',
-    month: 'MAY',
-    tag: 'Early Bird',
-    image: bg1,
-  },
-  {
-    title: 'Business Masterclass',
-    location: 'Radisson Blu, Ikeja',
-    price: '₦20,000',
-    rating: '4.9',
-    day: '11',
-    month: 'MAY',
-    tag: '✅ Verified',
-    verified: true,
-    image: bg1,
-  },
-]
+function searchEvents() {
+  router.push({ path: '/events', query: search.value ? { search: search.value } : {} })
+}
 
-const vendors = [
-  { name: 'DJ Neptune', type: 'DJ & Music', image: bg1 },
-  { name: 'Cake by Tolu', type: 'Baker', image: bg1 },
-  { name: 'Grace Decor', type: 'Event Decor', image: bg1 },
-  { name: 'Prime Rentals', type: 'Equipment', image: bg1 },
-]
+async function loadEvents() {
+  loading.value = true
+  error.value = false
+  try {
+    const response = await eventService.getPublicEvents({ per_page: 6 })
+    events.value = response.data || []
+  } catch {
+    events.value = []
+    error.value = true
+  } finally {
+    loading.value = false
+  }
+}
 
 onMounted(() => {
-  AOS.init({
-    duration: 800,
-    once: true,
-    offset: 100,
-    easing: 'ease-out-cubic',
-    delay: 0,
-    disable: false,
-    startEvent: 'DOMContentLoaded',
-    initClassName: 'aos-init',
-    animatedClassName: 'aos-animate',
-    useClassNames: false,
-    disableMutationObserver: false,
-    debounceDelay: 50,
-    throttleDelay: 99,
-  })
+  loadEvents()
+  categoryService.getCategories().then(data => { categories.value = data }).catch(() => {})
 })
 </script>
 
 <style scoped>
-.ambient-bg {
-  background:
-    radial-gradient(circle at 18% 8%, rgba(255, 106, 0, 0.16), transparent 24%),
-    radial-gradient(circle at 82% 14%, rgba(168, 85, 247, 0.23), transparent 28%),
-    radial-gradient(circle at 50% 45%, rgba(168, 85, 247, 0.12), transparent 34%),
-    radial-gradient(circle at 18% 68%, rgba(255, 106, 0, 0.12), transparent 28%),
-    radial-gradient(circle at 88% 78%, rgba(168, 85, 247, 0.18), transparent 30%),
-    #050505;
-}
-
-.glow-orange {
-  box-shadow:
-    0 0 18px rgba(255, 106, 0, 0.35),
-    0 0 45px rgba(255, 106, 0, 0.12);
-}
-
-.glow-orange-soft {
-  box-shadow:
-    0 0 14px rgba(255, 106, 0, 0.24),
-    0 0 35px rgba(255, 106, 0, 0.1);
-}
-
-.glow-purple {
-  box-shadow:
-    0 0 18px rgba(168, 85, 247, 0.35),
-    0 0 55px rgba(168, 85, 247, 0.16);
-}
-
-.glow-purple-soft {
-  box-shadow:
-    0 0 14px rgba(168, 85, 247, 0.28),
-    0 0 35px rgba(168, 85, 247, 0.12);
-}
-
-.glow-mix {
-  box-shadow:
-    0 0 20px rgba(255, 106, 0, 0.28),
-    0 0 55px rgba(168, 85, 247, 0.22);
-}
+.home-shell { background: radial-gradient(circle at 72% 8%, rgba(124, 49, 159, .24), transparent 28%), radial-gradient(circle at 10% 27%, rgba(239, 99, 29, .13), transparent 31%), #08070b; }
+.hero-accent { background: linear-gradient(100deg, #ffb15d 6%, #ff682d 55%, #fb4772); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.event-card:hover { box-shadow: 0 24px 60px rgba(0,0,0,.35), 0 0 35px rgba(234, 104, 42, .1); }
+@media (prefers-reduced-motion: reduce) { .event-card, .event-card img { transition: none; } }
 </style>

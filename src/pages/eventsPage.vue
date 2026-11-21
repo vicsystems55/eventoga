@@ -712,6 +712,7 @@ watch(currentPage, fetchEvents)
 onMounted(async () => {
   const urlParams = new URLSearchParams(window.location.search)
   const category = urlParams.get('category')
+  searchQuery.value = urlParams.get('search') || ''
 
   await fetchCategories()
 
