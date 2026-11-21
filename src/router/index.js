@@ -89,6 +89,7 @@ const routes = [
         path: "my-events",
         name: "MyEvents",
         component: () => import("../pages/dashboard/MyEvents.vue"),
+        meta: { role: "organizer" },
       },
       {
         path: "all-events",
@@ -103,9 +104,16 @@ const routes = [
         meta: { role: "superadmin" },
       },
       {
+        path: "organizer-applications",
+        name: "OrganizerApplications",
+        component: () => import("../pages/dashboard/OrganizerApplications.vue"),
+        meta: { role: "superadmin" },
+      },
+      {
         path: "organizer-onboarding",
         name: "OrganizerOnboarding",
         component: () => import("../pages/dashboard/OrganizerOnboarding.vue"),
+        meta: { role: "organizer" },
       },
             {
         path: "attendee-onboarding",
@@ -122,6 +130,13 @@ const routes = [
         path: "create-event",
         name: "CreateEvent",
         component: () => import("../pages/dashboard/CreateEvent.vue"),
+        meta: { role: "organizer" },
+      },
+      {
+        path: "edit-event/:id",
+        name: "EditEvent",
+        component: () => import("../pages/dashboard/CreateEvent.vue"),
+        meta: { role: "organizer" },
       },
       {
         path: "bookings",

@@ -259,7 +259,8 @@ const handleLogin = async () => {
       password: loginForm.value.password,
     })
 
-    router.push('/dashboard')
+    const user = JSON.parse(localStorage.getItem('eventoga_user') || '{}')
+    router.push(user.roles?.includes('organizer') ? '/dashboard/organizer-onboarding' : '/dashboard')
   } catch (error) {
     errorMessage.value = error.response?.data?.message || 'Login failed'
   } finally {

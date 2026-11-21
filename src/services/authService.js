@@ -27,6 +27,7 @@ async register(payload) {
   if (data.token) {
     localStorage.setItem('eventoga_token', data.token)
     localStorage.setItem('eventoga_user', JSON.stringify(data.user))
+    if (data.refresh_token) localStorage.setItem(REFRESH_KEY, data.refresh_token)
   }
 
   return data

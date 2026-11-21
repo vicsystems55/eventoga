@@ -2,17 +2,34 @@ import api from "./api";
 
 export const eventService = {
   async createEvent(payload) {
-    const { data } = await api.post("/events", payload, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const { data } = await api.post("/organizer/events", payload);
+    return data.data;
+  },
 
-    return data;
+  async updateEvent(id, payload) {
+    const { data } = await api.patch(`/organizer/events/${id}`, payload);
+    return data.data;
+  },
+
+  async getOrganizerEvent(id) {
+    const { data } = await api.get(`/organizer/events/${id}`);
+    return data.data;
+  },
+
+  async submitEvent(id) {
+    const { data } = await api.post(`/organizer/events/${id}/submit`);
+    return data.data;
+  },
+
+  async uploadImage(file) {
+    const form = new FormData();
+    form.append('image', file);
+    const { data } = await api.post('/organizer/media', form);
+    return data.data.url;
   },
 
   async getMyEvents(params = {}) {
-    const { data } = await api.get("/my-events", { params });
+    const { data } = await api.get("/organizer/events", { params });
     return data.data;
   },
 

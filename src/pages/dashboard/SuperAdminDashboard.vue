@@ -11,7 +11,7 @@
     </section>
     <section class="grid gap-5 lg:grid-cols-2">
       <router-link to="/dashboard/all-events?status=submitted" class="rounded-2xl border border-purple-500/30 bg-purple-500/10 p-6 transition hover:border-purple-400"><p class="text-sm text-purple-300">Events awaiting approval</p><p class="mt-2 text-4xl font-black">{{ number(stats.action_required?.events_awaiting_approval) }}</p><p class="mt-4 text-sm font-bold">Review events →</p></router-link>
-      <div class="rounded-2xl border border-orange-500/30 bg-orange-500/10 p-6"><p class="text-sm text-orange-300">Organizer applications</p><p class="mt-2 text-4xl font-black">{{ number(stats.action_required?.organizer_applications) }}</p><p class="mt-4 text-sm text-gray-400">Approval workflow is coming in the organizer phase.</p></div>
+      <router-link to="/dashboard/organizer-applications" class="rounded-2xl border border-orange-500/30 bg-orange-500/10 p-6"><p class="text-sm text-orange-300">Organizer applications</p><p class="mt-2 text-4xl font-black">{{ number(stats.action_required?.organizer_applications) }}</p><p class="mt-4 text-sm font-bold">Review applications →</p></router-link>
     </section>
     <section class="grid gap-5 lg:grid-cols-2">
       <div class="rounded-2xl border border-white/10 bg-[#0b0b0b] p-6"><div class="flex items-center justify-between"><h2 class="text-xl font-bold">Event status</h2><router-link to="/dashboard/all-events" class="text-sm text-orange-400">View all</router-link></div><div class="mt-5 space-y-3"><div v-for="item in eventStatuses" :key="item.label" class="flex justify-between border-b border-white/10 pb-3 text-sm"><span class="text-gray-300">{{ item.label }}</span><strong>{{ item.value }}</strong></div></div></div>
